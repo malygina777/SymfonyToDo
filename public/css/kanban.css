@@ -1,0 +1,66 @@
+body {
+    background: linear-gradient(180deg, #faf8f3 0%, #f7f4ee 60%, #f4f1ea 100%);
+}
+
+.kanban-column {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.navbar.bg-dark {
+    background-color: rgb(158 112 146) !important;
+}
+
+:root {
+    --kanban-col-bg: var(--bs-gray-100);
+}
+.letter-2 {
+    letter-spacing: 0.1em;
+}
+
+/* Колонка */
+.kanban-column {
+    background: var(--kanban-col-bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 360px;
+}
+/* Шапка колонки */
+.kanban-column-header {
+    font-size: 0.85rem;
+}
+/* Список карточек */
+.kanban-cards {
+    flex: 1;
+    overflow: auto;
+    padding-bottom: 0.25rem;
+}
+/* Карточка */
+.kanban-card .card-body {
+    line-height: 1.2;
+}
+.kanban-meta {
+    opacity: 0.8;
+}
+
+/* Цветная точка-индикатор в правом верхнем углу */
+.dot {
+    display: inline-block;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    margin-left: 0.5rem;
+}
+
+/* Swimlane (EXPEDITE) */
+.kanban-swimlane .lane-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+@media (min-width: 992px) {
+    .kanban-column {
+        min-height: 420px;
+    }
+}
