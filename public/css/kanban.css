@@ -10,6 +10,11 @@ body {
     background-color: rgb(158 112 146) !important;
 }
 
+.bg-kanban-footer {
+    background-color: rgb(230 209 224) !important;
+}
+/* background-color: rgb(230 209 224) !important; */
+
 :root {
     --kanban-col-bg: var(--bs-gray-100);
 }
@@ -63,4 +68,28 @@ body {
     .kanban-column {
         min-height: 420px;
     }
+}
+
+/* Логотип по умолчанию (starte de styles)*/
+.navbar .navbar-brand .brand-logo {
+    display: inline-block;
+    width: 32px; /* фиксированные размеры */
+    height: 32px;
+    border-radius: 6px; /* сглаживаем углы, чтобы тень смотрелась аккуратнее */
+    transform-origin: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+/* Наводим курсор */
+.navbar .navbar-brand:hover .brand-logo,
+.navbar .navbar-brand:focus-visible .brand-logo {
+    transform: scale(1.12); /* увеличиваем плавно, но чуть-чуть */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); /* мягкая тень */
+    filter: brightness(1.1); /* делаем чуть ярче */
+}
+
+/* Нажатие */
+.navbar .navbar-brand:active .brand-logo {
+    transform: scale(1.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }

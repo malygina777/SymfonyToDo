@@ -7,54 +7,6 @@
 
 
 
-
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-  <div class="container">
-    {# <a class="navbar-brand" href="{{ path('app_tasks') }}">📝 TodoList</a> #}
-    <a class="navbar-brand" href="#">📝 TodoList</a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div id="mainNav" class="collapse navbar-collapse">
-      <ul class="navbar-nav me-auto">
-        {% if app.user %}
-          {# <li class="nav-item"><a class="nav-link" href="{{ path('app_tasks') }}">Mes tâches</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ path('app_task_new') }}">Créer une tâche</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ path('app_shared_tasks') }}">Tâches partagées</a></li> #}
-          <li class="nav-item"><a class="nav-link" href="#">Mes tâches</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Créer une tâche</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Tâches partagées</a></li>
-        {% endif %}
-      </ul>
-
-      <ul class="navbar-nav ms-auto">
-        {% if app.user %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-              {{ app.user.username ?? app.user.email }}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              {# <li><a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a></li> #}
-              <li><a class="dropdown-item" href="#">Déconnexion</a></li>
-            </ul>
-          </li>
-        {% else %}
-          {# <li class="nav-item"><a class="btn btn-outline-light me-2" href="{{ path('app_login') }}">Connexion</a></li>
-          <li class="nav-item"><a class="btn btn-warning" href="{{ path('app_register') }}">Inscription</a></li> #}
-          <li class="nav-item"><a class="btn btn-outline-light me-2" href="#">Connexion</a></li>
-          <li class="nav-item"><a class="btn btn-warning" href="#">Inscription</a></li>
-        {% endif %}
-      </ul>
-    </div>
-  </div>
-</nav>
-
-
-
-
-
 <div class="container py-4">
   <header class="text-center mb-4">
     <h1 class="h4 text-uppercase fw-bold letter-2">Tableau Kanban</h1>

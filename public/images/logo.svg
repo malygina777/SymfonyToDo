@@ -1,0 +1,14 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+  <!-- рамка -->
+  <rect x="2" y="2" width="20" height="20" rx="5"
+        fill="none" stroke="currentColor" stroke-width="1.8"/>
+  <!-- 3 колонки (будут тем же цветом, что и текст навбара) -->
+  <rect x="6"   y="6.8" width="2.4" height="10.4" rx="1.2" fill="currentColor" opacity=".95"/>
+  <rect x="10.8" y="6.8" width="2.4" height="10.4" rx="1.2" fill="currentColor" opacity=".65"/>
+  <rect x="15.6" y="6.8" width="2.4" height="10.4" rx="1.2" fill="currentColor" opacity=".40"/>
+  <!-- маркеры статусов в цветах твоих колонок -->
+  <circle cx="7.2"  cy="9.2"  r="0.9" fill="#0d6efd"/>
+  <circle cx="12"   cy="12"   r="0.9" fill="#ffc107"/>
+  <circle cx="16.8" cy="14.8" r="0.9" fill="#28a745"/>
+</svg>
