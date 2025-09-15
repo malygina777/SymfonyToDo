@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+{% block layout_header %}{% endblock %}
+{% block layout_footer %}{% endblock %}
+
+
+
+
+
+{% block title %}Inscription · TodoList{% endblock %}
+
+{% block body %}
+<div class=" page-bg-registration">
+
+  <div class="d-flex justify-content-center align-items-center min-vh-100 ">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+       
+      <div class="card card-glass shadow-lg">
+      {# <div class="card border-0 shadow rounded-4"> #}
+        <div class="card-header bg-kanban-footer text-primary-emphasis text-center rounded-top-4">
+          <h1 class="h3 fw-bold mb-1">Créez votre compte</h1>
+        </div>
+
+        <div class="card-body p-4 p-lg-5">
+          {{ form_errors(registrationForm) }}
+
+          {{ form_start(registrationForm) }}
+
+            <div class="mb-3">
+              {{ form_label(registrationForm.email, 'E-mail', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+              <div class="input-group">
+                <span class="input-group-text">@</span>
+                {{ form_widget(registrationForm.email, { attr: {class: 'form-control', placeholder: 'nom@domaine.com'} }) }}
+              </div>
+              {{ form_errors(registrationForm.email) }}
+              </div>
+
+            <div class="mb-4">
+              {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+              {{ form_widget(registrationForm.plainPassword, { attr: {class: 'form-control', placeholder: 'Au moins 6 caractères'} }) }}
+              {{ form_errors(registrationForm.plainPassword) }}
+            </div>
+
+            <button type="submit" class="btn btn-create px-4 w-50  py-2 d-block mx-auto">
+              S’inscrire
+            </button>
+
+          {{ form_end(registrationForm) }}
+        </div>
+
+        <div class="card-footer bg-body-tertiary text-center rounded-bottom-4">
+          <small class="text-muted">
+            Déjà un compte ?
+            <a class="text-primary text-decoration-none" href="{{ path('app_login') }}">Se connecter</a>
+          </small>
+        </div>
+      </div>
+
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  const email = document.querySelector('input[name="registration_form[email]"]');
+  if (!email) return;
+
+  const badValue = email.value.trim();
+
+  email.addEventListener('input', () => {
+    const err = email.closest('.mb-3')?.querySelector('ul'); // ищем просто <ul>
+    if (err && email.value.trim() !== badValue) {
+      err.style.display = 'none'; // или err.remove()
+    }
+  });
+});
+
+</script>
+{% endblock %}
+

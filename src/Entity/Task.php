@@ -6,7 +6,7 @@ use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
-#[ORM\Table(name: 'task', schema: 'public')]
+#[ORM\Table(name: 'task')]
 class Task
 {
     #[ORM\Id]
@@ -20,6 +20,8 @@ class Task
     #[ORM\Column(length: 20)]
     private ?string $status = null;
 
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $position = 0;
     
 
     public function getId(): ?int
@@ -51,5 +53,15 @@ class Task
         return $this;
     }
 
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
+        return $this;
+    }
     
 }

@@ -1,26 +1,42 @@
-/* =========================================================
-   0) БАЗОВЫЙ ФОН САЙТА (твои стили)
-   =======================================================*/
+/* Запрет выделения текста на всём сайте */
+* {
+    user-select: none;
+}
+
+html,
 body {
-    background: linear-gradient(180deg, #faf8f3 0%, #f7f4ee 60%, #f4f1ea 100%);
+    height: 100%;
+    margin: 0;
 }
 
-/* слегка приглушённая колонка канбана */
-.kanban-column {
-    background: rgba(0, 0, 0, 0.03);
+/* главный обёрточный блок — именно он должен быть flex-контейнером */
+.bg-kanban {
+    min-height: 100vh; /* занимает весь экран */
+    display: flex;
+    flex-direction: column; /* сверху вниз: header → main → footer */
+    background: url("/images/pexels1.jpg") center / cover no-repeat fixed;
 }
 
-/* Хедер/футер — твои корпоративные цвета */
-.navbar.bg-dark {
-    background-color: rgb(158 112 146) !important;
-}
-.bg-kanban-footer {
-    background-color: rgb(230 209 224) !important;
+/* основной контент растягивается и выталкивает футер вниз */
+.main-content {
+    flex: 1 0 auto;
 }
 
 /* общие переменные/утилиты */
 :root {
-    --kanban-col-bg: var(--bs-gray-100);
+    --kanban-col-bg: var(--bs-gray-60);
+    --bs-indigo: rgb(139, 124, 6);
+    --bs-primary: #3e6a8a; /* À FAIRE */
+    --bs-primary-rgb: 62, 106, 138;
+
+    --bs-warning: #9c6b14; /* EN COURS */
+    --bs-warning-rgb: 156, 107, 20;
+
+    --bs-success: #4f7f64; /* TERMINÉ */
+    --bs-success-rgb: 79, 127, 100;
+
+    --bs-danger: #b54b49; /* URGENT */
+    --bs-danger-rgb: 181, 75, 73;
 }
 .letter-2 {
     letter-spacing: 0.1em;
@@ -73,7 +89,7 @@ body {
 
 @media (min-width: 992px) {
     .kanban-column {
-        min-height: 420px;
+        min-height: 320px;
     }
 }
 
@@ -99,6 +115,14 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Убираем фокус-рамку у ссылок в навбаре */
+.navbar .nav-link:focus,
+.navbar .nav-link:focus-visible,
+.navbar .nav-link:active {
+    outline: none !important;
+    box-shadow: none !important; /* bootstrap добавляет тень на :focus */
+}
+
 /* =========================================================
    3) CRUD — КНОПКА "СОЗДАТЬ ЗАДАЧУ" (твои стили + уточнение)
    =======================================================*/
@@ -106,7 +130,7 @@ body {
 body .btn.btn-create {
     background-color: #ffffff;
     color: #6f1d1b;
-    border: 2px solid #6f1d1b;
+    border: 1px #4d4242;
     border-radius: 6px;
     padding: 0.45rem 1rem;
     font-weight: 600;
@@ -114,38 +138,9 @@ body .btn.btn-create {
 }
 body .btn.btn-create:hover,
 body .btn.btn-create:focus {
-    background-color: #581c56;
-    color: #fff;
-}
-
-/* =========================================================
-   4) МОИ ДОБАВЛЕНИЯ — ЛЕЙАУТ СО "СТИКИ"-ФУТЕРОМ
-   (ничего не ломает, только прижимает футер к низу)
-   =======================================================*/
-html,
-body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-/* main из base.html.twig */
-.main-content {
-    flex: 1 0 auto; /* тянется и выталкивает футер вниз */
-}
-
-/* футер из templates/footer/_footer.html.twig */
-.footer {
-    margin-top: auto !important; /* если где-то остался mt-5 — перекрываем */
-    flex-shrink: 0;
-}
-/* чуть смягчим бордер футера */
-.footer.border-top {
-    border-top-color: rgba(0, 0, 0, 0.08);
+    color: #181616;
+    background: rgba(255, 255, 255, 0.2); /* прозрачный белый фон */
+    backdrop-filter: blur(6px); /* размытие того, что за формой */
 }
 
 /* =========================================================
@@ -175,7 +170,7 @@ body {
 
 /* Цвета, согласованные с твоей палитрой (лаванда/бордо) */
 .table .btn.btn-action.btn-show {
-    color: #4a2950;
+    color: #8c878d;
     border-color: #c9b5c5;
     background-color: #fff;
 }
@@ -227,8 +222,8 @@ body {
 
 /* ВАЖНО: иначе текст будет белый на белом */
 .status-badge.badge-other {
-    background: #e9ecef;
-    color: #343a40;
+    background: #dc969b;
+    color: #000000;
 }
 /* input */
 .form-control:focus,
@@ -236,4 +231,139 @@ body {
     border-color: #6c757d;
     box-shadow: none;
     outline: none;
+}
+
+/* style pour column urgent*/
+/* Urgent: плитка без bootstrap-обёрток */
+.urgent-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem; /* расстояние между карточками */
+}
+
+/* по умолчанию — одна в ряд */
+.urgent-grid .kanban-card {
+    flex: 0 0 100%;
+}
+
+/* ≥768px (md): две в ряд */
+@media (min-width: 768px) {
+    .urgent-grid .kanban-card {
+        flex: 0 0 calc(50% - 0.5rem);
+    }
+}
+
+/* ≥992px (lg): четыре в ряд */
+@media (min-width: 992px) {
+    .urgent-grid .kanban-card {
+        flex: 0 0 calc(25% - 0.5rem);
+    }
+}
+
+/* Стиль для карточки в момент перетаскивания */
+/* ВИДНО СРАЗУ. Даже если Bootstrap ставит border:0, outline всё равно виден */
+.kanban-card.dragging {
+    outline: 0.1px solid #a492a4 !important;
+    box-shadow: 0 0 20px 6px rgb(85, 80, 80) !important; /* фиолетовое свечение */
+    transform: scale(1.03);
+    z-index: 1000;
+    position: relative;
+}
+/* если хочешь подсветить ещё и внутренности */
+.kanban-card.dragging .card-body {
+    filter: drop-shadow(0 0 6px rgba(77, 66, 77, 0.6));
+}
+
+/* === Landing (0-я страница) — лёгкие акценты под твой стиль === */
+
+/* Верхний бейджик "Bienvenue" */
+.hero-badge {
+    display: inline-block;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.65);
+}
+
+/* Заголовок героя — чуть крупнее и плотнее */
+.hero-title {
+    font-size: clamp(1.6rem, 1.2rem + 1.5vw, 2.25rem);
+    letter-spacing: 0.02em;
+}
+
+/* Полупрозрачная "стеклянная" карточка */
+.glass-card {
+    max-width: 980px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Круглые цветные точки под твою палитру Bootstrap */
+.feature-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.04);
+}
+
+.text-primary {
+    color: var(--bs-indigo) !important;
+}
+
+/*le page du home*/
+
+.page-bg-home {
+    min-height: 100vh;
+    background: url("/images/pexels.jpg") center / cover no-repeat fixed;
+}
+.hero-buttons {
+    padding: 7rem 0 3rem;
+}
+
+.page-bg-registration {
+    min-height: 100vh;
+    background: url("/images/pexels5.jpg") center / cover no-repeat fixed;
+}
+
+.page-bg-login {
+    min-height: 100vh;
+    background: url("/images/pexels6.jpg") center / cover no-repeat fixed;
+}
+
+.bg-kanban {
+    min-height: 100vh;
+    background: url("/images/pexels1.jpg") center / cover no-repeat fixed;
+}
+
+.card-glass,
+.badge-glass,
+.nav-glass,
+.kanban-glass,
+.footer-glass {
+    background: rgba(255, 255, 255, 0.2); /* прозрачный белый фон */
+    backdrop-filter: blur(6px); /* размытие того, что за формой */
+    -webkit-backdrop-filter: blur(10px); /* для Safari */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* лёгкая рамка */
+    border-radius: 1rem; /* скругление углов */
+}
+/*video*/
+
+.page-bg-home {
+    position: relative;
+    overflow: hidden;
+}
+
+.page-bg-home .bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* главное свойство — растягивает без деформации */
+    z-index: 0;
+}
+
+.page-bg-home > *:not(video) {
+    position: relative;
+    z-index: 1; /* чтобы текст и кнопки были поверх */
 }

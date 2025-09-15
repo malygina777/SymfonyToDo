@@ -2,12 +2,14 @@
 
 {% block title %}Kanban Board{% endblock %}
 
-{% block body %}
-<div class="container py-4">
-  <header class="text-center mb-4">
-    <h1 class="h4 text-uppercase fw-bold letter-2">Tableau Kanban</h1>
-    <p class="text-muted small mb-0"></p>
-  </header>
+
+
+{% block body  %}
+
+<div class="container py-4" >
+ 
+
+  <meta  name="csrf-kanban" content="{{ csrf_token('kanban_order') }}">
 
   {# === Заголовки и цвета для хедеров колонок (Bootstrap-классы) === #}
   {% set LABELS = {
@@ -30,7 +32,7 @@
     'urgent': 'bg-danger'
   } %}
 
-  <section class="kanban shadow-sm rounded-4 bg-white p-3 p-md-4">
+  <section class=" kanban kanban-glass shadow-sm rounded-4 p-3 p-md-2">
 
     {# --- ДИНАМИЧЕСКИЕ КОЛОНКИ: todo / doing / done --- #}
     <div class="row g-3 kanban-columns">
@@ -40,27 +42,27 @@
           <div class="kanban-column h-100 rounded-3 overflow-hidden">
             <div class="kanban-column-header d-flex align-items-center justify-content-between {{ HEADER_CLASS[key] }} px-3 py-2">
               <span class="fw-semibold text-uppercase small">{{ LABELS[key] }}</span>
-              <span class="badge text-bg-light text-dark">
+              <span id="count-{{key}}" class="badge text-bg-light text-dark">
                 {{ items|length }}
               </span>
             </div>
 
-            <div class="kanban-cards p-2">
+            <div class="kanban-cards p-2" id="col-{{key}}">
               {% for task in items %}
-                <div class="card kanban-card mb-2 shadow-sm border-0">
+                <div  class="card kanban-card mb-2 shadow-sm border-0" data-id="{{task.id}}">
                   <div class="card-body p-2">
                     <div class="d-flex align-items-start justify-content-between">
                       <div>
                         <div class="small fw-semibold">{{ task.title }}</div>
                         <div class="kanban-meta small text-muted">#{{ task.id }}</div>
                       </div>
-                      {# ===== [ЗАМЕНЕНО] динамический цвет кружка по статусу ===== #}
+                      
                       <span class="dot {{ DOT_COLOR[key] }}"></span>
                     </div>
                   </div>
                 </div>
               {% else %}
-                <div class="text-muted small px-2">—</div>
+                <div class="text-muted small px-2"></div>
               {% endfor %}
             </div>
           </div>
@@ -68,38 +70,134 @@
       {% endfor %}
     </div>
 
-    {# --- SWIMLANE: Urgent — берём из columns['urgent'] --- #}
+        {# --- SWIMLANE: Urgent — без .row/.col, просто flex-контейнер --- #}
     {% set urgentItems = columns['urgent'] ?? [] %}
     <div class="kanban-swimlane mt-3">
       <div class="lane-title bg-danger text-white text-center fw-semibold small py-1 rounded-top">
         {{ LABELS['urgent'] }}
+          <span id="count-urgent"  class="badge text-bg-light text-dark">
+            {{ urgentItems|length }}
+         </span>
       </div>
-      <div class="lane-area bg-body-secondary p-2 rounded-bottom">
-        <div class="row g-2">
-          {% for task in urgentItems %}
-            <div class="col-12 col-md-6 col-lg-3">
-              <div class="card kanban-card shadow-sm border-0">
-                <div class="card-body p-2">
-                  <div class="d-flex align-items-start justify-content-between">
-                    <div>
-                      <div class="small fw-semibold">{{ task.title }}</div>
-                      <div class="kanban-meta small text-muted">#{{ task.id }}</div>
-                    </div>
-                    {# ===== [ЗАМЕНЕНО] используем цвет для urgent из словаря ===== #}
-                    <span class="dot {{ DOT_COLOR['urgent'] }}"></span>
-                  </div>
-                </div>
-              </div>
+
+  {# ВАЖНО: id для JS + класс kanban-cards, но без Bootstrap row/col #}
+  <div id="col-urgent" class="lane-area  p-2 rounded-bottom kanban-cards urgent-grid">
+    {% for task in urgentItems %}
+      <div class="card kanban-card shadow-sm border-0" data-id="{{ task.id }}">
+        <div class="card-body p-2">
+          <div class="d-flex align-items-start justify-content-between">
+            <div>
+              <div class="small fw-semibold">{{ task.title }}</div>
+              <div class="kanban-meta small text-muted">#{{ task.id }}</div>
             </div>
-          {% else %}
-            <div class="col-12">
-              <div class="text-muted small px-2">—</div>
-            </div>
-          {% endfor %}
+            <span class="dot {{ DOT_COLOR['urgent'] }}"></span>
+          </div>
         </div>
       </div>
-    </div>
+    {% else %}
+      <div class="text-muted small px-2">—</div>
+    {% endfor %}
+  </div>
+</div>
 
   </section>
 </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {             // 1) Ждём, пока DOM построится (узлы уже доступны).
+  const columns = document.querySelectorAll('.kanban-cards');     // 2) Находим все контейнеры-колонки по классу .kanban-cards.
+  let dragged = null;                                             // 3) Переменная для ссылки на текущую перетаскиваемую карточку.
+  
+    // [ADD] соответствие колонок и классов цвета
+  const DOT_BY_COL = { todo:'bg-primary', doing:'bg-warning', done:'bg-success', urgent:'bg-danger' };
+  
+  // [ADD] перекрасить кружок у конкретной карточки
+  function applyDotColor(task, colKey) {
+    const dot = task.querySelector('.dot');
+    if (!dot) return;
+    dot.classList.remove('bg-primary', 'bg-warning', 'bg-success', 'bg-danger');
+    dot.classList.add(DOT_BY_COL[colKey] || 'bg-secondary');
+  }
+
+
+  // 1. Делаем карточки перетаскиваемыми
+  function bindDraggableCards() {                                 // 4) Функция: вешаем обработчики на все карточки.
+    document.querySelectorAll('.kanban-card').forEach(card => {   // 5) Находим все элементы с классом .kanban-card.
+      
+      card.setAttribute('draggable', 'true');                     // ajout  un atribu
+
+      card.addEventListener('dragstart', (e) => {                 // 6) Событие начала перетаскивания.
+        dragged = card;                                           // 7) Запоминаем, какую карточку тащим.
+        card.classList.add('dragging');                           // 8) Добавляем класс (можно стилизовать: .dragging {opacity:.6})
+        e.dataTransfer.setData('text/plain', card.dataset.id);    // 9) Кладём в “багаж” DnD ID карточки (для совместимости/Safari).
+      });
+
+      card.addEventListener('dragend', () => {                    // 10) Событие конца перетаскивания (мышь отпущена).
+        dragged?.classList.remove('dragging');                    // 11) Снимаем визуальный класс, если карточка ещё есть.
+        dragged = null;                                           // 12) Очищаем ссылку — больше ничего не тащим.
+      });
+    });
+  }
+  bindDraggableCards();                                           // 13) Сразу применяем обработчики ко всем текущим карточкам.
+
+  // 2. Позволяем колонкам принимать карточки
+  columns.forEach(col => {                                        // 14) Для каждой колонки...
+    col.addEventListener('dragover', (e) => {                     // 15) Событие “тащат над колонкой”.
+      e.preventDefault();                                         // 16) ОБЯЗАТЕЛЬНО: разрешить бросать (иначе drop не сработает).
+      if (!dragged) return;                                       // 17) Если ничего не тащим — выходим.
+      col.appendChild(dragged);                                   // 18) Простейшая логика: кладём карточку в КОНЕЦ этой колонки.
+    });
+
+        // A) функция пересчёта
+       function updateCounters() {
+      ['todo','doing','done','urgent'].forEach(k => {
+        const box = document.getElementById('col-' + k);
+        const badge = document.getElementById('count-' + k);
+        if (!box || !badge) return;                        // если какого-то блока/бейджа нет — пропускаем
+        badge.textContent = box.querySelectorAll('.kanban-card').length;
+      });
+   }
+
+      // B) первичный подсчёт при загрузке
+      updateCounters();
+
+    col.addEventListener('drop', () => {
+    // узнаём ключ колонки из её id
+    const colKey = (col.id || '').replace('col-', '');  // 'todo' | 'doing' | 'done' | 'urgent'
+    if (dragged) applyDotColor(dragged, colKey);        // перекрашиваем кружок у брошенной карточки
+    updateCounters();                                   // nous recalculons le nombre de taches dans la colonne
+    
+    saveOrder();                                        // сохраняем порядок
+  });
+  });
+
+  // 3. Сохраняем порядок
+  function saveOrder() {                                          // 21) Отправляем на сервер новый порядок карточек.
+    const csrf = document.querySelector('meta[name="csrf-kanban"]')?.content || '';
+                                                                  // 22) Достаём CSRF-токен из <meta>. ?. — “если узел есть”.
+    const data = {                                                // 23) Формируем объект с данными:
+      _token: csrf,                                               //     — кладём токен под ключом _token (как ждёт контроллер).
+      todo:   Array.from(document.querySelectorAll('#col-todo .kanban-card'))
+               .map(c => c.dataset.id),                           // 24) Собираем массив ID из карточек в #col-todo.
+      doing:  Array.from(document.querySelectorAll('#col-doing .kanban-card'))
+               .map(c => c.dataset.id),                           // 25) Точно так же — для doing…
+      done:   Array.from(document.querySelectorAll('#col-done .kanban-card'))
+               .map(c => c.dataset.id),                           // 26) …для done…
+      urgent: Array.from(document.querySelectorAll('#col-urgent .kanban-card'))
+               .map(c => c.dataset.id),                           // 27) …и для urgent.
+    };
+
+
+fetch('/kanban/save-order', {                                 // 28) Отправляем POST-запрос на роут сохранения.
+      method: 'POST',                                             // 29) Метод — POST.
+      headers: { 'Content-Type': 'application/json' },            // 30) Говорим серверу: шлём JSON.
+      body: JSON.stringify(data)                                  // 31) Превращаем объект data в JSON-строку.
+    });                                                           // 32) Ответ мы здесь не обрабатываем (по желанию можно .then()).
+  }
+});
+</script>
+
+
+
 {% endblock %}

@@ -1,0 +1,91 @@
+
+{% extends 'base.html.twig' %}
+{% block layout_header %}{% endblock %}
+{% block layout_footer %}{% endblock %}
+
+
+{% block title %}Connexion{% endblock %}
+
+
+{% block body %}
+
+<div class=" page-bg-login">
+  <div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-12 col-md-8 col-lg-5">
+
+      <div class="card card-glass border-0 shadow rounded-4">
+        <div class="card-header bg-kanban-footer text-primary-emphasis text-center rounded-top-4">
+          
+          <h1 class="h3 fw-bold mb-1">Connexion</h1>
+        </div>
+
+        <div class="card-body p-4">
+
+          {# flesh message succes#}
+        
+          {% for label, messages in app.flashes %}
+             {% for message in messages %}
+               <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                 {{ message }}
+                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+               </div>
+             {% endfor %}
+           {% endfor %}
+          
+        
+
+
+          {# Сообщение об ошибке авторизации #}
+          {% if error %}
+            <div class="alert alert-danger small mb-3">
+              {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+          {% endif %}
+
+          <form method="post" action="{{ path('app_login') }}" novalidate>
+            <div class="mb-3">
+              <label for="inputEmail" class="form-label small text-muted">E-mail</label>
+              <input
+                type="email"
+                id="inputEmail"
+                name="email"
+                class="form-control"
+                value="{{ last_username}}"
+                autocomplete="username"
+                required
+                autofocus
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="inputPassword" class="form-label small text-muted">Mot de passe</label>
+              <input
+                type="password"
+                id="inputPassword"
+                name="password"
+                class="form-control"
+                autocomplete="current-password"
+                required
+              >
+            </div>
+
+            {# CSRF-токен для form_login (intention по умолчанию — 'authenticate') #}
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <div class="d-flex align-items-center justify-content-between mt-4">
+              <button class="btn btn-create px-4" type="submit">Se connecter</button>
+               <small class="text-muted">
+                Pas de compte ?
+                    <a class="text-primary text-decoration-none" href="{{ path('app_registration') }}">Inscription</a>
+              </small>
+              
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
