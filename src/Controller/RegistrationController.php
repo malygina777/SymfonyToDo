@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\AppUser;
+use Throwable;
 
+use App\Entity\AppUser;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +21,8 @@ final class RegistrationController extends AbstractController
     public function register(
         Request $request,
         EntityManagerInterface $manager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        MailerInterface $mailer,
         ): Response
     {
          $user = new AppUser();
@@ -41,8 +45,20 @@ final class RegistrationController extends AbstractController
             $manager->persist($user);
             $manager->flush();
 
-            //6
+            //email
+             $email = (new TemplatedEmail())
+                 ->from('no-reply@todolist.local')
+                 ->to($user->getEmail())
+                 ->subject('Bienvenue')
+                 ->htmlTemplate('emails/welcome.html.twig');
+
+             $mailer->send($email);
+
+
+            //6 flash message
             $this->addFlash('success', 'Votre compte a été créé avec succés. Bienvenue!');
+
+            $request->getSession()->migrate(true);
 
             // 7. Перенаправляем (например, на логин)
             return $this->redirectToRoute('app_login'); 

@@ -1,12 +1,18 @@
 services:
+  mailer:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
   ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-16}-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
+      POSTGRES_DB: symfony_todo
       # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: "!ChangeMe!"
+      POSTGRES_USER: app
     ports:
       - "5432:5432"
     healthcheck:
@@ -35,6 +41,8 @@ services:
       - "8081:80"
     depends_on:
       - database
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
@@ -42,4 +50,5 @@ services:
 volumes:
   ###> doctrine/doctrine-bundle ###
   database_data:
+  pgadmin_data:
 ###< doctrine/doctrine-bundle ###

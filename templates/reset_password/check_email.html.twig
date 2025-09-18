@@ -1,0 +1,39 @@
+
+
+{% extends 'base.html.twig' %}
+{% block layout_header %}{% endblock %}
+{% block layout_footer %}{% endblock %}
+
+{% block title %}Password Reset Email Sent{% endblock %}
+
+{% block body %}
+<div class="page-bg-check">
+  <div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-12 col-md-8 col-lg-5">
+      <div class="card card-glass border-0 shadow rounded-4">
+
+        <div class="card-header bg-kanban-footer text-primary-emphasis text-center rounded-top-4">
+          <h1 class="h3 fw-bold mb-1">Password Reset Email Sent</h1>
+        </div>
+
+        <div class="card-body p-4 p-md-5 text-center">
+          <p class="mb-3">
+            If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.
+          </p>
+
+          <p class="mb-3">
+            This link will expire in 
+            <strong>{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</strong>.
+          </p>
+
+          <p class="mb-0">
+            If you don't receive an email, please check your spam folder 
+            or <a class='link-warning text-decoration-none fw-bold' href="{{ path('app_forgot_password_request') }}">try again</a>.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

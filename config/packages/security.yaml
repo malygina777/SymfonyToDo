@@ -20,6 +20,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+
                 default_target_path: app_kanban
                 username_parameter: email
                 password_parameter: password
@@ -28,6 +29,7 @@ security:
                 target: app_home
 
     access_control:
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/kanban, roles: ROLE_USER }

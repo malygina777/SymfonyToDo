@@ -331,6 +331,21 @@ body .btn.btn-create:focus {
     background: url("/images/pexels6.jpg") center / cover no-repeat fixed;
 }
 
+.page-bg-reset {
+    min-height: 100vh;
+    background: url("/images/pexels3.jpg") center / cover no-repeat fixed;
+}
+
+.page-bg-request {
+    min-height: 100vh;
+    background: url("/images/pexels4.jpg") center / cover no-repeat fixed;
+}
+
+.page-bg-check {
+    min-height: 100vh;
+    background: url("/images/pexels2.jpg") center / cover no-repeat fixed;
+}
+
 .bg-kanban {
     min-height: 100vh;
     background: url("/images/pexels1.jpg") center / cover no-repeat fixed;
@@ -342,7 +357,7 @@ body .btn.btn-create:focus {
 .kanban-glass,
 .footer-glass {
     background: rgba(255, 255, 255, 0.2); /* прозрачный белый фон */
-    backdrop-filter: blur(6px); /* размытие того, что за формой */
+    backdrop-filter: blur(10px); /* размытие того, что за формой */
     -webkit-backdrop-filter: blur(10px); /* для Safari */
     border: 1px solid rgba(255, 255, 255, 0.3); /* лёгкая рамка */
     border-radius: 1rem; /* скругление углов */
@@ -366,4 +381,8 @@ body .btn.btn-create:focus {
 .page-bg-home > *:not(video) {
     position: relative;
     z-index: 1; /* чтобы текст и кнопки были поверх */
+}
+
+.text-shadow {
+    text-shadow: 0 0 6px rgb(69, 55, 55), 0 0 12px rgb(25, 24, 24);
 }

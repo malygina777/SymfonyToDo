@@ -20,9 +20,13 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'E-mail',
+                'trim' => true,
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'Veuillez saisir votre e-mail.']),
-                    new Assert\Email(['message' => 'Adresse e-mail invalide.']),
+                    new Assert\Email([
+                        'mode' => Assert\Email::VALIDATION_MODE_STRICT,
+                        'message' => 'Adresse e-mail invalide.',
+                    ]),
                     new Assert\Length([
                         'max' => 180,
                         'maxMessage' => "L\'e-mail ne peut pas dépasser {{limit}} caractères.",
@@ -50,10 +54,10 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => AppUser::class,
-             // Включаем защиту от CSRF-атак
-            'csrf_protection' => true,
-            'csrf_field_name' => '_token',
-            'csrf_token_id'   => 'user_registration',
+            
+            // 'csrf_protection' => true,
+            // 'csrf_field_name' => '_token',
+            // 'csrf_token_id'   => 'user_registration',
         ]);
     }
 }

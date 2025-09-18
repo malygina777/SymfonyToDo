@@ -1,0 +1,67 @@
+
+{% extends 'base.html.twig' %}
+{% block layout_header %}{% endblock %}
+{% block layout_footer %}{% endblock %}
+
+{% block title %}Enter your new password{% endblock %}
+
+{% block body %}
+<div class="page-bg-reset">
+  <div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-12 col-md-8 col-lg-5">
+      <div class="card card-glass border-0 shadow rounded-4">
+
+        {# possible flash from controller (e.g. invalid/expired token) #}
+        {% for flash_error in app.flashes('reset_password_error') %}
+          <div class="alert alert-danger m-3 mb-0" role="alert">{{ flash_error }}</div>
+        {% endfor %}
+
+        <div class="card-header bg-kanban-footer text-primary-emphasis text-center rounded-top-4">
+          <h1 class="h3 fw-bold mb-1">Enter your new password</h1>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+
+          {{ form_start(resetForm) }}
+
+          {# --- Если поле повторяющееся (обычно так и есть) --- #}
+          {% if resetForm.plainPassword.first is defined %}
+            <div class="mb-3">
+              {{ form_label(resetForm.plainPassword.first, 'New password', {
+                label_attr: { class: 'form-label small text-muted' }
+              }) }}
+              {{ form_widget(resetForm.plainPassword.first, {
+                attr: { class: 'form-control', placeholder: 'At least 6 characters' }
+              }) }}
+              {{ form_errors(resetForm.plainPassword.first) }}
+            </div>
+
+            <div class="mb-4">
+              {{ form_label(resetForm.plainPassword.second, 'Repeat password', {
+                label_attr: { class: 'form-label small text-muted' }
+              }) }}
+              {{ form_widget(resetForm.plainPassword.second, {
+                attr: { class: 'form-control', placeholder: 'Repeat the password' }
+              }) }}
+              {{ form_errors(resetForm.plainPassword.second) }}
+            </div>
+
+         
+          {% endif %}
+          
+          <div class="d-flex align-items-center justify-content-between mt-4">
+          <a href="{{ path('app_forgot_password_request') }}" class="link-secondary text-decoration-none"> &#8592; Back </a>
+           
+
+            <button type="submit" class="btn btn-create px-4">
+              Save new password
+            </button>
+          </div>
+
+          {{ form_end(resetForm) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

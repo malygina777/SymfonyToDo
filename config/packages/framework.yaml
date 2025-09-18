@@ -1,12 +1,14 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
-    secret: '%env(APP_SECRET)%'
-
-    # Note that the session will be started ONLY if you read or write from it.
+    secret: "%env(APP_SECRET)%"
     session: true
+    # ВКЛЮЧАЕМ CSRF (важно!)
+    csrf_protection: true
+    # Сессии нужны для хранения CSRF-токена
 
-    #esi: true
-    #fragments: true
+    # enabled: true # можно и просто "true", но так нагляднее
+    # cookie_samesite: lax # безопасное значение по умолчанию
+    # cookie_secure: auto
 
 when@test:
     framework:
