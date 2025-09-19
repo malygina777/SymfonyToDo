@@ -1,0 +1,84 @@
+
+
+{% extends 'base.html.twig' %}
+{% block title %}Mon profil{% endblock %}
+
+{% block body %}
+<div class="page-bg-kanban">
+  <div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-12 col-md-10 col-lg-8">
+      <div class="card card-glass border-0 shadow rounded-4">
+
+        <div class="card-header bg-kanban-footer text-primary-emphasis text-center rounded-top-4">
+          <h1 class="h4 fw-bold mb-0">Mon profil</h1>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+
+          {# флеши #}
+          {% for label, messages in app.flashes %}
+            {% for message in messages %}
+              <div class="alert alert-{{ label }} mb-3">{{ message }}</div>
+            {% endfor %}
+          {% endfor %}
+
+          {# ДВЕ КОЛОНКИ: слева — аватар, справа — форма #}
+          <div class="row align-items-center g-4">
+
+            {# ЛЕВАЯ КОЛОНКА #}
+            <div class="col-12 col-md-5">
+              <div class="text-center">
+                {% if app.user.avatar %}
+                  <img
+                    src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}"
+                    alt="Avatar"
+                    class="rounded-circle mb-3"
+                    style="width:180px;height:180px;object-fit:cover;">
+                {% else %}
+                  <div class="rounded-circle bg-body-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                       style="width:150px;height:150px;">🙂</div>
+                {% endif %}
+
+                <div class="fw-semibold small text-uppercase text-muted">
+                  Photo de profil
+                </div>
+
+                <div class="mt-2 small text-muted">
+                  {{ app.user.email }}
+                </div>
+              </div>
+            </div>
+
+            {# ПРАВАЯ КОЛОНКА (с вертикальным разделителем) #}
+            <div class="col-12 col-md-7">
+             
+              <div class="ps-md-4 border-md-start">
+                
+
+                {{ form_start(avatarForm, { action: path('app_profile_avatar') }) }}
+                  <div class="row g-3 align-items-center">
+                    <div class="col-12">
+                      {{ form_row(avatarForm.avatarFile) }}
+                      {{ form_errors(avatarForm.avatarFile) }}
+                    </div>
+                    <div class="col-12">
+                      <button class="btn btn-create px-4">Mettre à jour la photo</button>
+                    </div>
+                  </div>
+                {{ form_end(avatarForm) }}
+
+                <div class="mt-4">
+                  <a class="btn btn-outline-secondary" href="{{ path('app_kanban') }}">Retour</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          {# /row #}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

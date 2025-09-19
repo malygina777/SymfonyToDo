@@ -22,6 +22,27 @@ class Task
 
     #[ORM\Column(type: 'integer', options: ['default' => 0])]
     private int $position = 0;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $dueAt = null;
+
+    #[ORM\ManyToOne(targetEntity: AppUser::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?AppUser $owner = null;
+
+    public function getOwner(): ?AppUser
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?AppUser $owner): self
+    {
+        $this->owner = $owner;
+        return $this;
+    }
+
+    public function getDueAt(): ?\DateTimeImmutable { return $this->dueAt; }
+    public function setDueAt(?\DateTimeImmutable $d): self { $this->dueAt = $d; return $this; }
     
 
     public function getId(): ?int

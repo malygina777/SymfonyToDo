@@ -1,0 +1,24 @@
+{# <p>Bonjour,</p>
+<p>Votre tâche <strong>{{ task.title }}</strong> est arrivée à échéance et a été déplacée dans la colonne <strong>URGENT</strong>.</p>
+<p>Ouvrir le tableau: <a href="{{ absolute_url(path('app_kanban')) }}">Kanban</a></p> #}
+
+
+<!DOCTYPE html>
+<html lang="fr">
+  <body style="font-family: Arial, sans-serif; background-color: #f6f6f6; margin:0; padding:0;">
+    <div style="max-width:600px; margin:30px auto; background:#ffffff; border-radius:8px; padding:20px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+      
+      <h1 style="font-size:18px; color:#333333; margin-bottom:15px;">Bonjour,</h1>
+      
+      <p style="font-size:14px; color:#555555; line-height:1.5; margin:0 0 15px 0;">
+        Votre tâche <strong>{{ task.title }}</strong> est arrivée à échéance
+        et a été déplacée dans la colonne 
+        <span style="color:#c0392b; font-weight:bold;">URGENT</span>.
+      </p>
+      
+      <p style="font-size:14px; color:#555555; line-height:1.5; margin:0;">
+        Merci de la traiter dès que possible.
+      </p>
+    </div>
+  </body>
+</html>

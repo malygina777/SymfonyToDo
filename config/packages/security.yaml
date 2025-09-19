@@ -29,7 +29,8 @@ security:
                 target: app_home
 
     access_control:
-        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+        - { path: ^/home, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/register, roles: PUBLIC_ACCESS }
-        - { path: ^/kanban, roles: ROLE_USER }
+        - { path: ^/registration, roles: PUBLIC_ACCESS }
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: ROLE_USER }

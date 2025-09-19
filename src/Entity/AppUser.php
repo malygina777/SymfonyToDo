@@ -38,6 +38,26 @@ class AppUser implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    /*    1) Новая колонка в таблице пользователей.
+    * #[ORM\Column] — атрибут Doctrine: говорит «это колонка в БД».
+    nullable: true — поле можно не заполнять (у юзера может не быть аватара).*/
+     #[ORM\Column(nullable: true)]
+     private ?string $avatar = null;
+
+
+     // 2) Геттер — чтобы читать значение из объекта (Twig/контроллер).
+     public function getAvatar(): ?string
+     {
+         return $this->avatar;
+     }
+
+     // 3) Сеттер — чтобы записывать значение в объект (когда загрузим файл).
+     public function setAvatar(?string $avatar): self
+     {
+         $this->avatar = $avatar;
+         return $this;
+     }
+
 
     public function __construct() {
          return $this->roles = ['ROLE_USER'];

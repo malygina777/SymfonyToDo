@@ -30,6 +30,12 @@ final class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var \App\Entity\AppUser $user */
+             $user = $this->getUser();        // текущий пользователь
+             $task->setOwner($user);          // <= ВАЖНО: заполняем owner_id
+
+      
             $entityManager->persist($task);
             $entityManager->flush();
 
