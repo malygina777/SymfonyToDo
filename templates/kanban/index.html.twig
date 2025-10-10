@@ -1,30 +1,30 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Kanban Board{% endblock %}
 
+{% block body %}
+<div class="container py-4">
 
+  <meta name="csrf-kanban" content="{{ csrf_token('kanban_order') }}">
 
-{% block body  %}
-
-<div class="container py-4" >
- 
-
-  <meta  name="csrf-kanban" content="{{ csrf_token('kanban_order') }}">
-
-  {# === Заголовки и цвета для хедеров колонок (Bootstrap-классы) === #}
+  {# Подписи колонок #}
   {% set LABELS = {
+    'urgent': 'Urgent',
     'todo':   'A faire',
     'doing':  'En cours',
-    'done':   'Terminé',
-    'urgent': 'Urgent'
+    'done':   'Terminé'
   } %}
+
+  {# Цветовые классы шапок #}
   {% set HEADER_CLASS = {
     'todo':   'bg-primary text-white',
     'doing':  'bg-warning text-dark',
-    'done':   'bg-success text-white'
+    'done':   'bg-success text-white',
+    'urgent': 'bg-danger text-white'
   } %}
 
-  {# ===================== [ДОБАВЛЕНО] словарь цветов для кружков #}
+  {# Цветная точка на карточке #}
   {% set DOT_COLOR = {
     'todo':   'bg-primary',
     'doing':  'bg-warning',
@@ -32,31 +32,33 @@
     'urgent': 'bg-danger'
   } %}
 
-  <section class=" kanban kanban-glass shadow-sm rounded-4 p-3 p-md-2">
+  <section class="kanban kanban-glass shadow-sm rounded-4 p-3 p-md-2">
 
-    {# --- ДИНАМИЧЕСКИЕ КОЛОНКИ: todo / doing / done --- #}
-    <div class="row g-3 kanban-columns">
-      {% for key in ['todo','doing','done'] %}
+    {# === ВСЕ КОЛОНКИ В ОДНОМ РЯДУ ===
+       Urgent идёт первой, затем todo/doing/done
+       - < lg: горизонтальная прокрутка
+       - ≥ lg: 4 колонки ровно #}
+    <div class="row flex-nowrap flex-lg-wrap g-3 overflow-auto kanban-columns">
+
+      {% for key in ['urgent','todo','doing','done'] %}
         {% set items = columns[key] ?? [] %}
-        <div class="col-12 col-md-4">
+
+        <div class="col-10 col-sm-8 col-md-6 col-lg-3">
           <div class="kanban-column h-100 rounded-3 overflow-hidden">
             <div class="kanban-column-header d-flex align-items-center justify-content-between {{ HEADER_CLASS[key] }} px-3 py-2">
               <span class="fw-semibold text-uppercase small">{{ LABELS[key] }}</span>
-              <span id="count-{{key}}" class="badge text-bg-light text-dark">
-                {{ items|length }}
-              </span>
+              <span id="count-{{ key }}" class="badge text-bg-light text-dark">{{ items|length }}</span>
             </div>
 
-            <div class="kanban-cards p-2" id="col-{{key}}">
+            <div class="kanban-cards p-2" id="col-{{ key }}">
               {% for task in items %}
-                <div  class="card kanban-card mb-2 shadow-sm border-0" data-id="{{task.id}}">
+                <div class="card kanban-card mb-2 shadow-sm border-0" data-id="{{ task.id }}">
                   <div class="card-body p-2">
                     <div class="d-flex align-items-start justify-content-between">
                       <div>
-                        <div class="small fw-semibold">{{ task.title }}</div>
                         <div class="kanban-meta small text-muted">#{{ task.id }}</div>
+                        <div class="small fw-semibold  text-break">{{ task.title }}</div>
                       </div>
-                      
                       <span class="dot {{ DOT_COLOR[key] }}"></span>
                     </div>
                   </div>
@@ -67,42 +69,12 @@
             </div>
           </div>
         </div>
+
       {% endfor %}
     </div>
 
-        {# --- SWIMLANE: Urgent — без .row/.col, просто flex-контейнер --- #}
-    {% set urgentItems = columns['urgent'] ?? [] %}
-    <div class="kanban-swimlane mt-3">
-      <div class="lane-title bg-danger text-white text-center fw-semibold small py-1 rounded-top">
-        {{ LABELS['urgent'] }}
-          <span id="count-urgent"  class="badge text-bg-light text-dark">
-            {{ urgentItems|length }}
-         </span>
-      </div>
-
-  {# ВАЖНО: id для JS + класс kanban-cards, но без Bootstrap row/col #}
-  <div id="col-urgent" class="lane-area  p-2 rounded-bottom kanban-cards urgent-grid">
-    {% for task in urgentItems %}
-      <div class="card kanban-card shadow-sm border-0" data-id="{{ task.id }}">
-        <div class="card-body p-2">
-          <div class="d-flex align-items-start justify-content-between">
-            <div>
-              <div class="small fw-semibold">{{ task.title }}</div>
-              <div class="kanban-meta small text-muted">#{{ task.id }}</div>
-            </div>
-            <span class="dot {{ DOT_COLOR['urgent'] }}"></span>
-          </div>
-        </div>
-      </div>
-    {% else %}
-      <div class="text-muted small px-2"></div>
-    {% endfor %}
-  </div>
-</div>
-
   </section>
 </div>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {             // 1) Ждём, пока DOM построится (узлы уже доступны).

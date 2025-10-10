@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
@@ -29,6 +30,9 @@ class Task
     #[ORM\ManyToOne(targetEntity: AppUser::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?AppUser $owner = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
 
     public function getOwner(): ?AppUser
     {
@@ -82,6 +86,18 @@ class Task
     public function setPosition(int $position): self
     {
         $this->position = $position;
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
         return $this;
     }
     

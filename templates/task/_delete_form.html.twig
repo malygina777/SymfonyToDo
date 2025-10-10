@@ -1,14 +1,25 @@
+{# templates/task/_delete_form.html.twig #}
+<div class="modal fade" id="deleteModal-{{ task.id }}" tabindex="-1"
+     aria-labelledby="deleteModalLabel-{{ task.id }}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel-{{ task.id }}">Confirmer la suppression</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
 
-<form method="post"
-      action="{{ path('app_task_delete', {'id': task.id}) }}"
-      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');"
-      class="d-inline">
+      <div class="modal-body">
+        Êtes-vous sûr de vouloir supprimer cette tâche ?
+      </div>
 
-  <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
 
-  
-
-  <button type="submit" class="btn btn-outline-danger btn-sm" title="Supprimer">
-        🗑️
-    </button>
-</form>
+        <form method="post" action="{{ path('app_task_delete', {'id': task.id}) }}">
+          <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+          <button type="submit" class="btn btn-danger">Supprimer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

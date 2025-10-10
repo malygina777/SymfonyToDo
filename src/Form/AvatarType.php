@@ -18,7 +18,7 @@ class AvatarType extends AbstractType
          $builder->add('avatarFile', FileType::class, [
            
             'mapped' => false,            // <- важно: это не поле сущности
-            'required' => true,
+           
             'constraints' => [
                 new Image([
                      'maxSize' => '10M',

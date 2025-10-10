@@ -87,12 +87,6 @@ body {
     letter-spacing: 0.08em;
 }
 
-@media (min-width: 992px) {
-    .kanban-column {
-        min-height: 320px;
-    }
-}
-
 /* =========================================================
    2) ЛОГОТИП В НАВБАРЕ (твои стили)
    =======================================================*/
@@ -115,12 +109,8 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Убираем фокус-рамку у ссылок в навбаре */
-.navbar .nav-link:focus,
-.navbar .nav-link:focus-visible,
-.navbar .nav-link:active {
-    outline: none !important;
-    box-shadow: none !important; /* bootstrap добавляет тень на :focus */
+.navbar .text-focus:hover {
+    color: rgba(255, 255, 255, 0.927) !important;
 }
 
 /* =========================================================
@@ -148,12 +138,12 @@ body .btn.btn-create:focus {
    (ровный ряд, зазоры, цвета под твою тему)
    =======================================================*/
 /* контейнер для кнопок действий (в шаблоне — d-flex gap-2) */
-.table .action-group {
+.action-group {
     gap: 0.5rem;
 }
 
 /* базовый вид action-кнопок (всегда поверх bootstrap) */
-.table .btn.btn-action {
+.btn.btn-action {
     --btn-pad-x: 0.5rem;
     --btn-pad-y: 0.35rem;
     padding: var(--btn-pad-y) var(--btn-pad-x);
@@ -169,39 +159,39 @@ body .btn.btn-create:focus {
 }
 
 /* Цвета, согласованные с твоей палитрой (лаванда/бордо) */
-.table .btn.btn-action.btn-show {
+.btn.btn-action.btn-show {
     color: #8c878d;
     border-color: #c9b5c5;
     background-color: #fff;
 }
-.table .btn.btn-action.btn-show:hover {
+.btn.btn-action.btn-show:hover {
     background-color: #efddee;
     border-color: #b89fb3;
 }
 
-.table .btn.btn-action.btn-edit {
+.btn.btn-action.btn-edit {
     color: #6f1d1b;
     border-color: #e3c4c3;
     background-color: #fff;
 }
-.table .btn.btn-action.btn-edit:hover {
+.btn.btn-action.btn-edit:hover {
     background-color: #f5e0df;
     border-color: #d7afad;
 }
 
 /* форма удаления, которую мы include'им */
-.table .btn.btn-action.btn-delete {
+.btn.btn-action.btn-delete {
     color: #8a2c2a;
     border-color: #efc7c6;
     background-color: #fff;
 }
-.table .btn.btn-action.btn-delete:hover {
+.btn.btn-action.btn-delete:hover {
     background-color: #f6e1e0;
     border-color: #e6b2b1;
 }
 
 /* если иконки будут SVG — чуть выровняем */
-.table .btn.btn-action > svg {
+.btn.btn-action > svg {
     width: 1rem;
     height: 1rem;
 }
@@ -318,7 +308,7 @@ body .btn.btn-create:focus {
     background: url("/images/pexels.jpg") center / cover no-repeat fixed;
 }
 .hero-buttons {
-    padding: 7rem 0 3rem;
+    padding: 1rem 0 3rem;
 }
 
 .page-bg-registration {
@@ -383,6 +373,12 @@ body .btn.btn-create:focus {
     z-index: 1; /* чтобы текст и кнопки были поверх */
 }
 
-.text-shadow {
-    text-shadow: 0 0 6px rgb(69, 55, 55), 0 0 12px rgb(25, 24, 24);
+.text-break {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.outlinehome {
+    -webkit-text-stroke: 0.2px white;
 }

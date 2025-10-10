@@ -1,6 +1,4 @@
 
-
-{# templates/task/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Mes tâches{% endblock %}
@@ -8,85 +6,133 @@
 {% block body %}
 <div class="container py-4">
 
-  {# Заголовок страницы + кнопка "Создать" справа #}
-  <div class="d-flex align-items-center justify-content-between mb-3">
+  {# Заголовок + кнопка (кнопка уедет вниз на узких экранах) #}
+  <div class="d-flex align-items-start align-items-md-center justify-content-between flex-wrap gap-2 mb-3">
     <div>
       <h1 class="page-title m-0">Mes tâches</h1>
       <div class="page-subtitle">Toutes vos tâches au même endroit</div>
     </div>
 
-    <a class="btn btn-create mb-3" href="{{ path('app_task_new') }}">
-      Créer une tâche
-    </a>
+    
+    <a href="{{ path('app_kanban') }}" class="btn btn-light mb-3 d-block d-md-none"> ← Retour </a>
+    <a class="btn btn-create" href="{{ path('app_task_new') }}">Créer une tâche</a>
   </div>
 
-  {# ============================
-     1) СЛОВАРЬ СТАТУСОВ
-     ============================ #}
-  {# ⟵ ADDED: код статуса -> метка (что показываем) и css-класс бейджа (цвет) #}
+  {# Словарь статусов #}
   {% set STATUS = {
     'todo':   {'label': 'À faire',  'badge': 'badge-todo'},
     'doing':  {'label': 'En cours', 'badge': 'badge-doing'},
     'done':   {'label': 'Terminé',  'badge': 'badge-done'},
-    'urgent': {'label': 'Urgent',   'badge': 'badge-other'}  # используем существующий класс
+    'urgent': {'label': 'Urgent',   'badge': 'badge-other'}
   } %}
 
-  {# Карточка с таблицей #}
-  <div class="card-glass table-card shadow-sm">
-    <div class="table-responsive">
-      <table class="table align-middle mb-0">
-        <thead>
-          <tr>
-            <th style="width:72px">#</th>
-            <th>Titre</th>
-            <th style="width:160px">Statut</th>
-            <th class="text-end" style="width:160px">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for task in tasks %}
-            <tr>
-              <td class="text-muted">{{ task.id }}</td>
-              <td>{{ task.title }}</td>
+  {# =========================
+     A) МОБИЛЬНАЯ ВЕРСИЯ (< sm)
+     ========================= #}
+  <div class="d-sm-none">
+    {% if tasks is empty %}
+      <div class="card-glass shadow-sm p-4 text-center text-muted">Aucune tâche pour le moment.</div>
+    {% else %}
+      <div class="vstack gap-2">
+        {% for task in tasks %}
+          {% set code = (task.status ?? '')|lower|replace({' ':'','_':''}) %}
+          {% set meta = STATUS[code] ?? null %}
 
-              {# ============================
-                 2) ВЫВОД СТАТУСА
-                 ============================ #}
-              {# ⟵ REPLACED: заменили старую логику на словарь STATUS #}
-              <td>
-                {# нормализуем значение из БД: нижний регистр + убираем пробелы/подчёркивания #}
-                {% set code = (task.status ?? '')|lower|replace({' ':'','_':''}) %}
-                {% set meta = STATUS[code] ?? null %}
-
+          <div class="card-glass shadow-sm p-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="small text-muted">#{{ task.id }}</div>
+              <div>
                 {% if meta %}
                   <span class="badge status-badge {{ meta.badge }}">{{ meta.label }}</span>
                 {% else %}
-                  {# запасной вариант, если в БД неожиданное значение #}
                   <span class="badge status-badge badge-other">{{ task.status }}</span>
                 {% endif %}
-              </td>
+              </div>
 
-              {# Кнопки действий #}
-              <td class="text-end">
-                <div class="btn-group btn-group-sm action-group d-flex justify-content-end">
-                  <a class="btn btn-action btn-show" title="Voir"
-                     href="{{ path('app_task_show', {id: task.id}) }}">👁</a>
-                  <a class="btn btn-action btn-edit" title="Modifier"
-                     href="{{ path('app_task_edit', {id: task.id}) }}">✏️</a>
-                  {{ include('task/_delete_form.html.twig', { task: task }) }}
-                </div>
-              </td>
-            </tr>
-          {% else %}
-            <tr>
-              <td colspan="4" class="text-center text-muted py-4">
-                Aucune tâche pour le moment.
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+             <div class="d-flex justify-content-end gap-2">
+              <a class="btn btn-sm btn-action btn-show" title="Voir"
+                 href="{{ path('app_task_show', {id: task.id}) }}">👁</a>
+              <a class="btn btn-sm btn-action btn-edit" title="Modifier"
+                 href="{{ path('app_task_edit', {id: task.id}) }}">✏️</a>
+              <button type="button"
+                            class="btn btn-outline-danger btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal-{{ task.id }}">
+                      🗑
+              </button>  
+            </div>
+
+            </div>
+
+            <div class="fw-semibold mb-2 text-break">{{ task.title }}</div>
+
+            
+          </div>
+        {% endfor %}
+      </div>
+        {% endif %}
   </div>
+
+  {# =========================
+     B) ДЕСКТОП/ПЛАНШЕТ (≥ sm)
+     ========================= #}
+  <div class="d-none d-sm-block">
+    <div class="card-glass table-card shadow-sm">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr>
+              <th style="width:72px">#</th>
+              <th>Titre</th>
+              <th style="width:160px">Statut</th>
+              <th class="text-end" style="width:160px">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in tasks %}
+              {% set code = (task.status ?? '')|lower|replace({' ':'','_':''}) %}
+              {% set meta = STATUS[code] ?? null %}
+              <tr>
+                <td class="text-muted">{{ task.id }}</td>
+                <td class="text-break">{{ task.title }}</td>
+                <td>
+                  {% if meta %}
+                    <span class="badge status-badge {{ meta.badge }}">{{ meta.label }}</span>
+                  {% else %}
+                    <span class="badge status-badge badge-other">{{ task.status }}</span>
+                  {% endif %}
+                </td>
+                <td class="text-end">
+                  <div class="d-inline-flex flex-wrap justify-content-end gap-2">
+                    <a class="btn btn-sm btn-action btn-show" title="Voir"
+                       href="{{ path('app_task_show', {id: task.id}) }}">👁</a>
+                    <a class="btn btn-sm btn-action btn-edit" title="Modifier"
+                       href="{{ path('app_task_edit', {id: task.id}) }}">✏️</a>
+                    <button type="button"
+                            class="btn btn-outline-danger btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal-{{ task.id }}">
+                      🗑
+                    </button>                    
+
+                  </div>
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="4" class="text-center text-muted py-4">
+                  Aucune tâche pour le moment.
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>   
+  </div>
+  {% for task in tasks %}
+       {% include 'task/_delete_form.html.twig' with { task: task } %}
+     {% endfor %}
 </div>
+ 
 {% endblock %}

@@ -8,51 +8,51 @@
 {% block body %}
 
 
-<div class="page-bg-home">
+<div class="page-bg-home ">
 
-  {# Фоновое видео  #}
-  <video class="bg-video" autoplay muted loop playsinline
-         poster="{{ asset('images/pexels5.jpg') }}" aria-hidden="true">
-    <source src="{{ asset('videos/1.mp4') }}" type="video/mp4">
+
+  <video class="bg-video " autoplay muted loop playsinline
+         poster="{{ asset("images/pexels5.jpg") }}" aria-hidden="true">
+    <source src="{{ asset("videos/femme.mp4") }}" type="video/mp4">
    
   </video>
 
   
   
    <div class="container hero-buttons text-start">
-    <h2 class="display-4 fw-bold text-white mb-3 ">Organisez vos tâches facilement et avec élégance</h2>
-    <p class="lead fw-bold text-white mb-4">Votre projet sous contrôle total.</p>
+    <h2 class="display-4 fw-bold text-white mb-3 " style="-webkit-text-stroke: .5px black;">Organisez vos tâches facilement et avec élégance</h2>
+    <p class="lead fw-bold text-white mb-4" style="-webkit-text-stroke: .5px black;">Votre projet sous contrôle total.</p>
 
-    <div class="d-flex gap-3">
+    
+   <div class="d-flex gap-3">
       <a href="{{ path('app_registration') }}" class="btn btn-light px-4">S’inscrire</a>
       <a href="{{ path('app_login') }}" class="btn btn-light px-4">Se connecter</a>
-    </div>
-  </div>
+    </div>  
+   </div>
   
  
-
-
- 
-
-  {# Блок «фичи» под героем #}
   <section class="container mt-5">
+     
+    
+
+
     <div class="row g-4">
       <div class="col-12 col-md-6 col-lg-4">
        
           <div class="card-body text-center p-4">
         
-            <h5 class="fw-semibold mb-2 text-shadow">Statuts clairs</h5>
+            <h5 class="fw-bold mb-2 outlinehome">Statuts clairs</h5>
             <p class="text-black mb-0 text-shadow"> Étapes de tâches compréhensibles + une colonne «Urgent».</p>
           </div>
-        
+  
       </div>
 
       <div class="col-12 col-md-6 col-lg-4">
         
           <div class="card-body text-center p-4">
            
-            <h5 class="fw-semibold mb-2 text-shadow">Glisser-déposer</h5>
-            <p class="text-black mb-0 text-shadow">Déplacez les cartes sans rechargement de la page.</p>
+            <h5 class="fw-bold mb-2 outlinehome" >Glisser-déposer</h5>
+            <p class="text-black mb-0  ">Déplacez les cartes sans rechargement de la page.</p>
           </div>
         
       </div>
@@ -61,12 +61,20 @@
        
           <div class="card-body text-center p-4">
            
-            <h5 class="fw-semibold mb-2 text-shadow">Design soigné</h5>
-            <p class="text-black mb-0 text-shadow">Interface simple et intuitive</p>
+            <h5 class="fw-bold mb-2 outlinehome">Design soigné</h5>
+            <p class="text-black mb-0 ">Interface simple et intuitive</p>
           </div>
-        
+
+
+
       </div>
+
+      
+
     </div>
-  </section>
-</div>
-{% endblock %}
+
+   
+  </section> 
+
+  
+{% endblock %} 

@@ -49,6 +49,6 @@ final class OverdueTaskService
 
         if ($tasks) { $this->em->flush(); }
 
-        return \count($tasks);
+        return count($tasks);
     }
 }

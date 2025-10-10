@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class TaskType extends AbstractType
 {
@@ -19,7 +20,7 @@ class TaskType extends AbstractType
              ->add('dueAt', DateType::class, [   // <-- новое поле
                 'widget' => 'single_text',       // календарик HTML5
                 'required' => false,             // можно оставить пустым
-                'label' => 'Date limite',
+                'label' => 'Date à laquelle vous souhaitez etre alerté',
              ])
             ->add('status', ChoiceType::class, [
                 'label'   => 'Statut',
@@ -31,7 +32,16 @@ class TaskType extends AbstractType
                 ],
                 'placeholder' => 'Sélectionnez un statut',
                 'attr' => ['class' => 'form-select'],
-            ]);
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'label' => 'description',
+                'attr' => [
+                    'rows' => 3,
+                    'placeholder' => 'Décrivez la tâche…',
+                    'class' => 'form-control',
+                ]
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

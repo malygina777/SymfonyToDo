@@ -1,8 +1,8 @@
 <nav class="navbar nav-glass  navbar-expand-md ">
   <div class="container">
     
-    
-    <a class="navbar-brand d-flex align-items-center text-white" href="{{ path('app_kanban') }}">
+    {#navbar-brand d-flex align-items-center text-white#}
+    <a class="navbar-brand d-none d-md-flex align-items-center text-white" href="{{ path('app_kanban') }}">
           <img
             src="{{ asset('images/logo.svg') }}"
             alt="Tableau Kanban"
@@ -12,17 +12,25 @@
           TodoList
     </a>
 
+    {# для маленьких экранов - бургер (но стилизован как твой бренд) #}
+    <a class="navbar-brand d-flex d-md-none align-items-center text-white"
+      data-bs-toggle="collapse" 
+       data-bs-target="#mainNav">
+      <img src="{{ asset('images/logo.svg') }}" width="28" height="28" class="brand-logo me-2">
+      TodoList
+    </a>
+
     
 
     <div id="mainNav" class="collapse navbar-collapse ">
       <ul class="navbar-nav me-auto">  
-          <li class="nav-item "><a class="nav-link " href="{{path('app_task_index')}}">Mes tâches</a></li>   
+          <li class="nav-item "><a class="nav-link text-focus" href="{{path('app_task_index')}}">Mes tâches</a></li>   
       </ul>
 
       <ul class=" navbar-nav ms-auto ">
             {% if app.user %}
               <li class="nav-item d-flex align-items-center gap-2">
-                 <a class="nav-link " href="{{path('app_profile')}}">Mon profile</a>
+                 <a class="nav-link text-focus" href="{{path('app_profile')}}">Mon profile</a>
                 <form method="post" action="{{ path('app_logout') }}">
                   <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
                   <button type="submit" class="btn btn-sm btn-light">
