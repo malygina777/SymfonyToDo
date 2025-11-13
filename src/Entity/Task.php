@@ -28,7 +28,7 @@ class Task
     private ?\DateTimeImmutable $dueAt = null;
 
     #[ORM\ManyToOne(targetEntity: AppUser::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?AppUser $owner = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

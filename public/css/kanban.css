@@ -1,6 +1,6 @@
-/* Запрет выделения текста на всём сайте */
 * {
     user-select: none;
+    outline: none !important;
 }
 
 html,
@@ -111,6 +111,8 @@ body {
 
 .navbar .text-focus:hover {
     color: rgba(255, 255, 255, 0.927) !important;
+    transform: scale(1.08) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* =========================================================
@@ -196,6 +198,14 @@ body .btn.btn-create:focus {
     height: 1rem;
 }
 
+.btn.btn-warning:hover,
+.btn.btn-secondary:hover,
+.btn.btn-success:hover,
+.btn.btn-danger:hover,
+.btn.btn-info:hover {
+    background: rgba(255, 255, 255, 0.2) !important; /* прозрачный белый фон */
+}
+
 /* ===== CRUD — статус-бейджи (перебиваем bootstrap) ===== */
 .status-badge.badge-todo {
     background: #e7e5ff;
@@ -220,7 +230,7 @@ body .btn.btn-create:focus {
 .form-select:focus {
     border-color: #6c757d;
     box-shadow: none;
-    outline: none;
+    /* outline: none; */
 }
 
 /* style pour column urgent*/
@@ -236,25 +246,11 @@ body .btn.btn-create:focus {
     flex: 0 0 100%;
 }
 
-/* ≥768px (md): две в ряд */
-@media (min-width: 768px) {
-    .urgent-grid .kanban-card {
-        flex: 0 0 calc(50% - 0.5rem);
-    }
-}
-
-/* ≥992px (lg): четыре в ряд */
-@media (min-width: 992px) {
-    .urgent-grid .kanban-card {
-        flex: 0 0 calc(25% - 0.5rem);
-    }
-}
-
 /* Стиль для карточки в момент перетаскивания */
 /* ВИДНО СРАЗУ. Даже если Bootstrap ставит border:0, outline всё равно виден */
 .kanban-card.dragging {
-    outline: 0.1px solid #a492a4 !important;
-    box-shadow: 0 0 20px 6px rgb(85, 80, 80) !important; /* фиолетовое свечение */
+    outline: 0.1px solid #a8a6a8 !important;
+    box-shadow: 0 0 15px 6px rgb(106, 82, 82) !important; /* фиолетовое свечение */
     transform: scale(1.03);
     z-index: 1000;
     position: relative;
@@ -305,7 +301,7 @@ body .btn.btn-create:focus {
 
 .page-bg-home {
     min-height: 100vh;
-    background: url("/images/pexels.jpg") center / cover no-repeat fixed;
+    /* background: url("/images/pexels4.jpg") center / cover no-repeat fixed; */
 }
 .hero-buttons {
     padding: 1rem 0 3rem;
@@ -338,7 +334,7 @@ body .btn.btn-create:focus {
 
 .bg-kanban {
     min-height: 100vh;
-    background: url("/images/pexels1.jpg") center / cover no-repeat fixed;
+    background: url("/images/pexel.png") center / cover no-repeat fixed;
 }
 
 .card-glass,
@@ -366,6 +362,8 @@ body .btn.btn-create:focus {
     height: 100%;
     object-fit: cover; /* главное свойство — растягивает без деформации */
     z-index: 0;
+    /* background: rgba(0, 0, 0, 0.8) !important; */
+    filter: brightness(0.8);
 }
 
 .page-bg-home > *:not(video) {
@@ -379,6 +377,15 @@ body .btn.btn-create:focus {
     word-break: break-word;
 }
 
-.outlinehome {
-    -webkit-text-stroke: 0.2px white;
+/* Видимый фокус для всех элементов по Tab */
+:focus-visible {
+    outline: 3px solid #f7bc0e !important; /* любой читаемый цвет */
+    outline-offset: 2px;
+}
+
+.text-shadow {
+    text-shadow: 0px 0px 4px rgb(11, 10, 10);
+}
+.change-text-color:hover {
+    color: #000000;
 }

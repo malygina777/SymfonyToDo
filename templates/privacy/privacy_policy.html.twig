@@ -1,0 +1,131 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité - TODOLIST{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+  <section class="kanban kanban-glass shadow-lg rounded-4 p-4 p-md-5 mx-auto"
+           style="max-width: 900px;"
+           role="region"
+           aria-label="Politique de confidentialité">
+
+    <header class="mb-4 text-center">
+      <h1 class="h3 mb-2">Politique de confidentialité</h1>
+      <p class="text-muted small mb-0">
+        Application Kanban / Todolist – Projet pédagogique<br>
+        Dernière mise à jour : {{ "now"|date("d/m/Y") }}
+      </p>
+    </header>
+
+    <div class="policy-text">
+
+      <p>
+        La présente politique de confidentialité explique comment l’application
+        <strong>Kanban / Todolist</strong> traite vos données personnelles.
+        Ce projet est réalisé dans le cadre d’une formation de
+        développeur web et respecte le <strong>RGPD</strong>.
+      </p>
+
+      <h2 class="h5 mt-4">1. Données collectées</h2>
+      <p>
+        Lorsque vous utilisez le formulaire de contact, nous collectons uniquement
+        les informations suivantes&nbsp;:
+      </p>
+      <ul>
+        <li><strong>Nom</strong> (champ obligatoire)</li>
+        <li><strong>Email</strong> (champ obligatoire)</li>
+        <li><strong>Message</strong> (champ obligatoire)</li>
+      </ul>
+      <p>
+        Aucune autre donnée (profilage, publicité, suivi marketing) n’est collectée.
+      </p>
+
+      <h2 class="h5 mt-4">2. Finalité du traitement</h2>
+      <p>
+        Ces données sont utilisées exclusivement pour&nbsp;:
+      </p>
+      <ul>
+        <li>répondre à votre demande envoyée via le formulaire ;</li>
+        <li>assurer le bon fonctionnement technique du site
+            (sécurité, sessions, authentification).</li>
+      </ul>
+
+      <h2 class="h5 mt-4">3. Base légale</h2>
+      <p>
+        Le traitement de vos données est fondé sur&nbsp;:
+      </p>
+      <ul>
+        <li>votre <strong>demande volontaire</strong> (envoi du formulaire) ;</li>
+        <li>notre <strong>intérêt légitime</strong> à assurer la sécurité et
+            le fonctionnement du site.</li>
+      </ul>
+
+      <h2 class="h5 mt-4">4. Durée de conservation</h2>
+      <p>
+        Vos données (nom, email, message) sont conservées pour une durée maximale de
+        <strong>1 an</strong>, puis supprimées.
+      </p>
+
+      <h2 class="h5 mt-4">5. Cookies et sessions</h2>
+      <p>
+        Nous utilisons uniquement des <strong>cookies strictement nécessaires</strong>
+        au fonctionnement de l’application&nbsp;:
+      </p>
+      <ul>
+        <li>cookies de session ;</li>
+        <li>cookies liés à la sécurité (ex.&nbsp;jetons CSRF) ;</li>
+        <li>cookies nécessaires à l’authentification de l’utilisateur.</li>
+      </ul>
+      <p>
+        <strong>Aucun</strong> cookie publicitaire, de mesure d’audience ou de suivi
+        marketing n’est utilisé.
+      </p>
+
+      <h2 class="h5 mt-4">6. Destinataires des données</h2>
+      <p>
+        Vos données ne sont pas revendues et ne sont pas transmises à des partenaires
+        commerciaux. Elles sont uniquement accessibles au responsable technique du site
+        dans le cadre du projet pédagogique.
+      </p>
+
+      <h2 class="h5 mt-4">7. Hébergement</h2>
+      <p>
+        Le site est hébergé par&nbsp;:
+        <br>
+        <strong>OVH</strong>, 2 rue Kellermann, 59100 Roubaix, France.
+      </p>
+
+      <h2 class="h5 mt-4">8. Vos droits</h2>
+      <p>
+        Conformément au RGPD, vous disposez des droits suivants sur vos données&nbsp;:
+      </p>
+      <ul>
+        <li>droit d’accès ;</li>
+        <li>droit de rectification ;</li>
+        <li>droit d’effacement ;</li>
+        <li>droit d’opposition ;</li>
+        <li>droit à la limitation du traitement.</li>
+      </ul>
+      <p>
+        Pour exercer vos droits ou pour toute question concernant vos données
+        personnelles, vous pouvez contacter&nbsp;:
+        <br>
+        📧 <strong>dpo@entreprise-fictive.fr</strong>
+
+
+             (adresse utilisée dans le cadre du projet).
+      </p>
+
+    </div>
+    <div class= "d-flex justify-content-center">
+    <a href="{{ path('app_kanban') }}" 
+         class="btn btn-secondary" 
+         role="button"
+         aria-label="Retourner à la page principale du ToDoList">← Retour</a>
+     </div>
+
+  </section>
+</div>
+{% endblock %}

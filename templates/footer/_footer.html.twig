@@ -1,16 +1,41 @@
 
-<footer class=" footer-glass">
-  <div class="container py-3 d-flex flex-column flex-md-row gap-2 align-items-center justify-content-between">
-    <div class="small text-muted">
-      &copy; {{ "now"|date("Y") }} Nadezhda — Symfony ToDo / Kanban
-    </div>
 
-    <ul class="nav gap-3 small">
-      <li class="nav-item"><a class="nav-link p-0 text-body-secondary" href="#" rel="noopener">À propos</a></li>
-      <li class="nav-item"><a class="nav-link p-0 text-body-secondary" href="mailto:malygina777@gmail.com">Contact</a></li>
-      <li class="nav-item"><a class="nav-link p-0 text-body-secondary" href="https://github.com/malygina777/SymfonyTodo" target="_blank" rel="noopener">GitHub</a></li>
-    </ul>
+
+<footer class="footer-glass shadow-lg" role="contentinfo">
+  <div class="container py-3 d-flex flex-column flex-md-row gap-2 align-items-center justify-content-between">
+
+    <p class="small text-muted mb-0">
+      &copy; {{ "now"|date("Y") }} Nadezhda — Symfony ToDo / Kanban
+    </p>
+
+    <!-- Навигация по футеру = отдельный landmark -->
+    <nav aria-label="Liens du pied de page">
+      <ul class="nav gap-3 small mb-0" role="list">
+        
+
+        <li class="nav-item">
+          <a class="nav-link p-0 text-body-secondary focus-ring rounded-1" href="mailto:malygina777@gmail.com">
+            Contact
+            <span class="visually-hidden"> — ouvrir votre application e-mail</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link p-0 text-body-secondary focus-ring rounded-1" href = "{{path('app_privacy')}}">
+            Politique de confidentialité
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link p-0 text-body-secondary focus-ring rounded-1"
+             href="https://github.com/malygina777/SymfonyTodo"
+             target="_blank" rel="noopener noreferrer">
+            GitHub
+            <span class="visually-hidden">(ouvre dans un nouvel onglet)</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
   </div>
 </footer>
-
-

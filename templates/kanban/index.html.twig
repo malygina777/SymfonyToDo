@@ -4,11 +4,12 @@
 {% block title %}Kanban Board{% endblock %}
 
 {% block body %}
+
+
 <div class="container py-4">
 
   <meta name="csrf-kanban" content="{{ csrf_token('kanban_order') }}">
 
-  {# Подписи колонок #}
   {% set LABELS = {
     'urgent': 'Urgent',
     'todo':   'A faire',
@@ -16,7 +17,6 @@
     'done':   'Terminé'
   } %}
 
-  {# Цветовые классы шапок #}
   {% set HEADER_CLASS = {
     'todo':   'bg-primary text-white',
     'doing':  'bg-warning text-dark',
@@ -24,7 +24,6 @@
     'urgent': 'bg-danger text-white'
   } %}
 
-  {# Цветная точка на карточке #}
   {% set DOT_COLOR = {
     'todo':   'bg-primary',
     'doing':  'bg-warning',
@@ -32,34 +31,43 @@
     'urgent': 'bg-danger'
   } %}
 
-  <section class="kanban kanban-glass shadow-sm rounded-4 p-3 p-md-2">
+  <section class="kanban kanban-glass shadow-lg rounded-4 p-3 p-md-2"
+           role="region" aria-label="Tableau Kanban">
 
-    {# === ВСЕ КОЛОНКИ В ОДНОМ РЯДУ ===
-       Urgent идёт первой, затем todo/doing/done
-       - < lg: горизонтальная прокрутка
-       - ≥ lg: 4 колонки ровно #}
-    <div class="row flex-nowrap flex-lg-wrap g-3 overflow-auto kanban-columns">
+    <div class="row flex-nowrap  g-3 overflow-auto kanban-columns">
 
       {% for key in ['urgent','todo','doing','done'] %}
         {% set items = columns[key] ?? [] %}
 
         <div class="col-10 col-sm-8 col-md-6 col-lg-3">
-          <div class="kanban-column h-100 rounded-3 overflow-hidden">
+          <div class="kanban-column h-100 rounded-3 overflow-hidden"
+               role="region"
+               aria-labelledby="col-title-{{ key }}">
+
             <div class="kanban-column-header d-flex align-items-center justify-content-between {{ HEADER_CLASS[key] }} px-3 py-2">
-              <span class="fw-semibold text-uppercase small">{{ LABELS[key] }}</span>
-              <span id="count-{{ key }}" class="badge text-bg-light text-dark">{{ items|length }}</span>
+              <span class="fw-semibold text-uppercase text-white small"
+                    id="col-title-{{ key }}">{{ LABELS[key] }}</span>
+
+              <span id="count-{{ key }}"
+                    class="badge text-bg-light text-dark"
+                    aria-live="polite" aria-atomic="true">{{ items|length }}</span>
             </div>
 
-            <div class="kanban-cards p-2" id="col-{{ key }}">
+            <div class="kanban-cards p-2" id="col-{{ key }}"
+                 role="list" aria-label="Cartes : {{ LABELS[key] }}">
               {% for task in items %}
-                <div class="card kanban-card mb-2 shadow-sm border-0" data-id="{{ task.id }}">
+                <div class="card kanban-card mb-2 shadow-sm border-0"
+                     data-id="{{ task.id }}"
+                     role="listitem"
+                     tabindex="0"
+                     aria-label="Tâche #{{ task.id }} — {{ task.title }}">
                   <div class="card-body p-2">
                     <div class="d-flex align-items-start justify-content-between">
                       <div>
                         <div class="kanban-meta small text-muted">#{{ task.id }}</div>
                         <div class="small fw-semibold  text-break">{{ task.title }}</div>
                       </div>
-                      <span class="dot {{ DOT_COLOR[key] }}"></span>
+                      <span class="dot {{ DOT_COLOR[key] }}" aria-hidden="true"></span>
                     </div>
                   </div>
                 </div>
@@ -75,6 +83,8 @@
 
   </section>
 </div>
+
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {             // 1) Ждём, пока DOM построится (узлы уже доступны).

@@ -16,9 +16,10 @@ final class TaskController extends AbstractController
 {
     #[Route(name: 'app_task_index', methods: ['GET'])]
     public function index(TaskRepository $taskRepository): Response
-    {
+    {    
+        $tasks = $taskRepository->findBy(['owner' => $this->getUser()], ['id' => 'ASC']);
         return $this->render('task/index.html.twig', [
-            'tasks' => $taskRepository->findAll(),
+            'tasks' => $tasks
         ]);
     }
 
@@ -32,8 +33,8 @@ final class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             /** @var \App\Entity\AppUser $user */
-             $user = $this->getUser();        // текущий пользователь
-             $task->setOwner($user);          // <= ВАЖНО: заполняем owner_id
+             $user = $this->getUser();       
+             $task->setOwner($user);         
 
       
             $entityManager->persist($task);

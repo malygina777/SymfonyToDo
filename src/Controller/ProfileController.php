@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
 
 #[Route('/profile')]
 final class ProfileController extends AbstractController
@@ -76,5 +78,31 @@ final class ProfileController extends AbstractController
 
         $this->addFlash('success', 'Avatar mis à jour ✔️');
         return $this->redirectToRoute('app_profile');
+    }
+
+    #[Route('/delete_account', name: 'app_delete_account', methods: ['POST'])]
+    public function deleteAccount(Request $request, EntityManagerInterface $em, TokenStorageInterface $tokenStorage): Response
+    {
+        // Проверка CSRF
+        if (!$this->isCsrfTokenValid('delete_account', $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide');
+        }
+
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé');
+        };
+        
+        $tokenStorage->setToken(null);
+        // Разлогиниваем пользователя
+        $request->getSession()->invalidate();
+
+        // Удаляем пользователя
+        $em->remove($user);
+        $em->flush();
+
+        
+        return $this->redirectToRoute('app_home');
     }
 }

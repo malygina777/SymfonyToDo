@@ -1,83 +1,92 @@
+
 {% extends 'base.html.twig' %}
 {% block title %}Mon profil{% endblock %}
 
 {% block body %}
+
+<a href="#main-content" class="visually-hidden-focusable">Aller au contenu principal</a>
+
 <div class="page-bg-kanban">
   <div class="d-flex justify-content-center align-items-center min-vh-100">
     <div class="col-12 col-md-10 col-lg-8">
-      <div class="card card-glass border-0 shadow rounded-4">
 
+      <main id="main-content" class="card card-glass border-0 shadow rounded-4" role="main">
         <div class="card-header bg-kanban-footer text-primary-emphasis text-center rounded-top-4">
           <h1 class="h4 fw-bold mb-0">Mon profil</h1>
         </div>
 
         <div class="card-body p-4 p-md-5">
 
-          {# флеши #}
+          {# Flash messages accessibles #}
           {% for label, messages in app.flashes %}
             {% for message in messages %}
-              <div class="alert alert-{{ label }} mb-3">{{ message }}</div>
+              <div class="alert alert-{{ label }}" role="alert" aria-live="assertive">
+                {{ message }}
+              </div>
             {% endfor %}
           {% endfor %}
 
-          {# ДВЕ КОЛОНКИ: слева — аватар, справа — форма #}
           <div class="row align-items-center g-4">
 
-            {# ЛЕВАЯ КОЛОНКА #}
-            <div class="col-12 col-md-5">
-              <div class="text-center">
-                {% if app.user.avatar %}
-                  <img
-                    src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}"
-                    alt="Avatar"
-                    class="rounded-circle mb-3"
-                    style="width:180px;height:180px;object-fit:cover;">
-                {% else %}
-                  <div class="rounded-circle bg-body-secondary d-inline-flex align-items-center justify-content-center mb-3"
-                       style="width:150px;height:150px;">🙂</div>
-                {% endif %}
-
-                <div class="fw-semibold small text-uppercase text-muted">
-                  Photo de profil
+            {# Colonne gauche : avatar #}
+            <div class="col-12 col-md-5 text-center">
+              {% if app.user.avatar %}
+                <img
+                  src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}"
+                  alt="Photo de profil de {{ app.user.email }}"
+                  class="rounded-circle mb-3"
+                  width="150" height="150"
+                  style="object-fit:cover;"
+                  loading="lazy">
+              {% else %}
+                <div class="rounded-circle bg-body-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                     style="width:150px;height:150px;" role="img" aria-label="Avatar par défaut">
+                     🙂
                 </div>
+              {% endif %}
 
-                <div class="mt-2 small text-muted">
-                  {{ app.user.email }}
-                </div>
-              </div>
+              <p class="small text-muted mb-0">{{ app.user.email }}</p>
             </div>
 
-            {# ПРАВАЯ КОЛОНКА (с вертикальным разделителем) #}
+            {# Colonne droite : formulaire #}
             <div class="col-12 col-md-7">
-             
               <div class="ps-md-4 border-md-start">
-                
 
                 {{ form_start(avatarForm, { action: path('app_profile_avatar') }) }}
 
-  {# тут один из вариантов #}
                   <div class="mb-3">
-                    {{ form_label(avatarForm.avatarFile, null, { label_attr: { class: 'form-label                 text-truncate' } }) }}
-                    {{ form_widget(avatarForm.avatarFile, { attr: { class: 'form-control w-100 text-truncate' } }) }}
+                    {{ form_label(avatarForm.avatarFile, 'Photo de profil', { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(avatarForm.avatarFile, { attr: { class: 'form-control', accept: 'image/*', 'aria-describedby': 'avatar-help' } }) }}
+                    <div id="avatar-help" class="form-text">
+                      Choisissez une image (JPEG ou PNG).
+                    </div>
                     {{ form_errors(avatarForm.avatarFile) }}
                   </div>
 
-                  <div class="d-flex justify-content-between gap-2">
-                    <button class="btn btn-create px-4">Mettre à jour la photo</button>
-                    <a class="btn btn-outline-secondary" href="{{ path('app_kanban') }}">← Retour</a>
+                  <div class="d-flex justify-content-between">
+                    <button class="btn btn-create px-4" type="submit">Mettre à jour</button>
+                     <a href="{{ path('app_kanban') }}" class="btn btn-secondary" role="button"aria-label="Retourner à la page principale du ToDoList">← Retour</a>
                   </div>
+
 
                 {{ form_end(avatarForm) }}
 
-                
+               <button type="button"
+                        class="btn btn-danger mt-4 change-text-color"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteAccountModal">
+                        Supprimer mon compte
+                </button>
+               
+
               </div>
             </div>
 
           </div>
-          {# /row #}
 
         </div>
-      </div>
+      </main>
+        {%include 'profile/deleteAccountModal.html.twig'%}  
     </div>
   </div>
 </div>

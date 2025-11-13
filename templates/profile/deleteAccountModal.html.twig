@@ -1,0 +1,39 @@
+
+
+{# Модальное окно Bootstrap #}
+<div class="modal fade" id="deleteAccountModal" tabindex="-1"
+     aria-labelledby="deleteAccountModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h2 class="modal-title h5 " id="deleteAccountModalLabel">
+          Supprimer votre compte
+        </h2>
+        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+
+      <div class="modal-body">
+        <p>
+          Êtes-vous sûr(e) de vouloir supprimer votre compte&nbsp;?
+          Cette action est <strong>définitive</strong> et toutes vos données
+          associées seront supprimées.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary change-text-color" data-bs-dismiss="modal">
+          Annuler
+        </button>
+
+        <form method="post" action="{{ path('app_delete_account') }}">
+          <input type="hidden" name="_token" value="{{ csrf_token('delete_account') }}">
+          <button type="submit" class="btn btn-danger change-text-color">
+            Supprimer définitivement
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

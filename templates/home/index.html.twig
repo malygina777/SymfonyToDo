@@ -1,80 +1,94 @@
+
 {% extends 'base.html.twig' %}
 {% block layout_header %}{% endblock %}
 {% block layout_footer %}{% endblock %}
 {% block title %}Bienvenue · TodoList{% endblock %}
 
-
-
 {% block body %}
+<main class="page-bg-home" id="main-content">
 
-
-<div class="page-bg-home ">
-
-
-  <video class="bg-video " autoplay muted loop playsinline
-         poster="{{ asset("images/pexels5.jpg") }}" aria-hidden="true">
-    <source src="{{ asset("videos/femme.mp4") }}" type="video/mp4">
-   
+  <!-- 🎬 Фоновое видео -->
+  <video
+    class="bg-video"
+    autoplay
+    muted
+    loop
+    playsinline
+    poster="{{ asset('images/pexels5.jpg') }}"
+    aria-hidden="true"
+  >
+    <source src="{{ asset('videos/femme.mp4') }}" type="video/mp4">
+    <!-- Текстовая альтернатива, если видео не поддерживается -->
+    Votre navigateur ne prend pas en charge la lecture de vidéo.
   </video>
 
   
-  
-   <div class="container hero-buttons text-start">
-    <h2 class="display-4 fw-bold text-white mb-3 " style="-webkit-text-stroke: .5px black;">Organisez vos tâches facilement et avec élégance</h2>
-    <p class="lead fw-bold text-white mb-4" style="-webkit-text-stroke: .5px black;">Votre projet sous contrôle total.</p>
+  <section
+    class="container hero-buttons text-start"
+    aria-labelledby="hero-title"
+  >
+    <h1 id="hero-title" class="display-4 fw-bold  text-white mb-3" style="-webkit-text-stroke: .2px black;">
+      Organisez vos tâches facilement et avec élégance
+    </h1>
 
-    
-   <div class="d-flex gap-3">
-      <a href="{{ path('app_registration') }}" class="btn btn-light px-4">S’inscrire</a>
-      <a href="{{ path('app_login') }}" class="btn btn-light px-4">Se connecter</a>
-    </div>  
-   </div>
-  
- 
-  <section class="container mt-5">
-     
-    
+    <p class="lead fw-bold text-white mb-4 text-shadow" >
+      Votre projet sous contrôle total.
+    </p>
 
+    <!-- 🔘 Кнопки действий -->
+    <div class="d-flex gap-3" role="group" aria-label="Actions principales">
+      <a href="{{ path('app_registration') }}" class="btn btn-warning  px-4">
+        S’inscrire
+        <span class="visually-hidden"> — créez un compte utilisateur</span>
+      </a>
 
-    <div class="row g-4">
-      <div class="col-12 col-md-6 col-lg-4">
-       
-          <div class="card-body text-center p-4">
-        
-            <h5 class="fw-bold mb-2 outlinehome">Statuts clairs</h5>
-            <p class="text-black mb-0 text-shadow"> Étapes de tâches compréhensibles + une colonne «Urgent».</p>
-          </div>
-  
-      </div>
-
-      <div class="col-12 col-md-6 col-lg-4">
-        
-          <div class="card-body text-center p-4">
-           
-            <h5 class="fw-bold mb-2 outlinehome" >Glisser-déposer</h5>
-            <p class="text-black mb-0  ">Déplacez les cartes sans rechargement de la page.</p>
-          </div>
-        
-      </div>
-
-      <div class="col-12 col-md-6 col-lg-4">
-       
-          <div class="card-body text-center p-4">
-           
-            <h5 class="fw-bold mb-2 outlinehome">Design soigné</h5>
-            <p class="text-black mb-0 ">Interface simple et intuitive</p>
-          </div>
-
-
-
-      </div>
-
-      
-
+      <a href="{{ path('app_login') }}" class="btn btn-warning  px-4">
+        Se connecter
+        <span class="visually-hidden"> — ouvrez votre session</span>
+      </a>
     </div>
+  </section>
 
-   
-  </section> 
+  <!-- 💼 Раздел с преимуществами -->
+  <section
+    class="container mt-5"
+    aria-labelledby="features-title"
+  >
+    <h2 id="features-title" class="visually-hidden">
+      Fonctionnalités principales du site
+    </h2>
 
-  
-{% endblock %} 
+    <div class="row g-4" role="list">
+      <!-- ✅ 1 -->
+      <article class="col-12 col-md-6 col-lg-4" role="listitem">
+        <div class="card-body text-center p-4  "  >
+          <h3 class=" text-white fw-bold mb-2 text-shadow">Statuts clairs</h3>
+          <p class="text-white mb-0 text-shadow h6">
+            Étapes de tâches compréhensibles + une colonne « Urgent ».
+          </p>
+        </div>
+      </article>
+
+      <!-- ✅ 2 -->
+      <article class="col-12 col-md-6 col-lg-4" role="listitem">
+        <div class="card-body text-center p-4  ">
+          <h3 class=" text-white fw-bold mb-2 text-shadow">Glisser-déposer</h3>
+          <p class="text-white text-black mb-0 text-shadow h6">
+            Déplacez les cartes sans rechargement de la page.
+          </p>
+        </div>
+      </article>
+
+      <!-- ✅ 3 -->
+      <article class="col-12 col-md-6 col-lg-4 "  role="listitem">
+        <div class="card-body text-center p-4  " >
+          <h3 class=" text-white fw-bold mb-2 text-shadow" >Design soigné</h3>
+          <p class="text-white  h6 text-black mb-0 text-shadow" >
+            Interface simple et intuitive.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+{% endblock %}

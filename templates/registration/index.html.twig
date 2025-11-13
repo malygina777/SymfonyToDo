@@ -9,38 +9,55 @@
 {% block title %}Inscription · TodoList{% endblock %}
 
 {% block body %}
-<div class=" page-bg-registration">
 
-  <div class="d-flex justify-content-center align-items-center min-vh-100 ">
+
+
+
+<a href="#main-content" class="visually-hidden-focusable">Aller au contenu principal</a>
+
+<div class="page-bg-registration">
+  <div class="d-flex justify-content-center align-items-center min-vh-100">
     <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-       
-      <div class="card card-glass shadow-lg">
-      {# <div class="card border-0 shadow rounded-4"> #}
+
+      <main id="main-content" class="card card-glass shadow-lg" role="main">
         <div class="card-header bg-kanban-footer text-primary-emphasis text-center rounded-top-4">
           <h1 class="h3 fw-bold mb-1">Créez votre compte</h1>
         </div>
 
         <div class="card-body p-4 p-lg-5">
-          {{ form_errors(registrationForm) }}
-
           {{ form_start(registrationForm) }}
 
+            {# Email #}
             <div class="mb-3">
               {{ form_label(registrationForm.email, 'E-mail', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
               <div class="input-group">
-                <span class="input-group-text">@</span>
-                {{ form_widget(registrationForm.email, { attr: {class: 'form-control', placeholder: 'nom@domaine.com'} }) }}
+                <span class="input-group-text" aria-hidden="true">@</span>
+                {{ form_widget(registrationForm.email, {
+                  attr: {
+                    class: 'form-control',
+                    placeholder: 'nom@domaine.com',
+                    autocomplete: 'email',
+                    inputmode: 'email'
+                  }
+                }) }}
               </div>
               {{ form_errors(registrationForm.email) }}
-              </div>
+            </div>
 
+            {# Mot de passe #}
             <div class="mb-4">
               {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
-              {{ form_widget(registrationForm.plainPassword, { attr: {class: 'form-control', placeholder: 'Au moins 6 caractères'} }) }}
+              {{ form_widget(registrationForm.plainPassword, {
+                attr: {
+                  class: 'form-control',
+                  placeholder: 'Au moins 6 caractères',
+                  autocomplete: 'new-password'
+                }
+              }) }}
               {{ form_errors(registrationForm.plainPassword) }}
             </div>
 
-            <button type="submit" class="btn btn-create px-4 w-50  py-2 d-block mx-auto">
+            <button type="submit" class="btn btn-create px-4 w-50 py-2 d-block mx-auto">
               S’inscrire
             </button>
 
@@ -53,13 +70,12 @@
             <a class="text-primary text-decoration-none" href="{{ path('app_login') }}">Se connecter</a>
           </small>
         </div>
-      </div>
-
-      
+      </main>
 
     </div>
   </div>
 </div>
+
 
 
 

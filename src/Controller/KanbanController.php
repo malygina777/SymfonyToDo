@@ -17,7 +17,7 @@ final class KanbanController extends AbstractController
     #[Route('/kanban', name: 'app_kanban')]
     public function index(TaskRepository $repoTask): Response
     {
-        $tasks = $repoTask->findBy([], ['id' => 'ASC']);
+        $tasks = $repoTask->findBy(['owner' => $this->getUser()], ['id' => 'ASC']);
 
         $columns = [
             'todo' => [],
@@ -29,7 +29,7 @@ final class KanbanController extends AbstractController
         foreach ($tasks as $task) 
         {
             $key = strtolower((string) $task->getStatus());
-            $key = array_key_exists($key, $columns) ? $key : 'todo';
+            // $key = array_key_exists($key, $columns) ? $key : 'todo';
             $columns[$key][] = $task;
 
         }
@@ -50,12 +50,12 @@ final class KanbanController extends AbstractController
         $data  = json_decode($req->getContent(), true) ?? [];
         $token = (string)($data['_token'] ?? '');
 
-        // проверка CSRF
+        // La vérification du CSRF
         if (!$csrf->isTokenValid(new CsrfToken('kanban_order', $token))) {
             return new JsonResponse(['ok' => false, 'error' => 'bad_csrf'], 400);
         }
 
-        // обновляем порядок и статус
+        // Mise à jour des colonnes
         $columns = ['todo','doing','done','urgent'];
         foreach ($columns as $col) {
             $ids = array_map('intval', (array)($data[$col] ?? []));
@@ -71,3 +71,4 @@ final class KanbanController extends AbstractController
         return new JsonResponse(['ok' => true]);
     }
 }
+
