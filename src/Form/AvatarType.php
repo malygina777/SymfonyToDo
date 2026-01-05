@@ -21,7 +21,7 @@ class AvatarType extends AbstractType
            
             'constraints' => [
                 new Image([
-                     'maxSize' => '10M',
+                     'maxSize' => '15M',
                      'mimeTypes' => ['image/jpeg','image/png','image/webp'], // без svg
                      'maxWidth'  => 8000,
                      'maxHeight' => 8000,

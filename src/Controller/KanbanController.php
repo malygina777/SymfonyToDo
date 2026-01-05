@@ -47,28 +47,34 @@ final class KanbanController extends AbstractController
         EntityManagerInterface $em,
         CsrfTokenManagerInterface $csrf
     ): JsonResponse {
+        // 1) On récupère le JSON envoyé par le front
         $data  = json_decode($req->getContent(), true) ?? [];
         $token = (string)($data['_token'] ?? '');
 
-        // La vérification du CSRF
+        // 2) Sécurité : vérification du token CSRF
         if (!$csrf->isTokenValid(new CsrfToken('kanban_order', $token))) {
             return new JsonResponse(['ok' => false, 'error' => 'bad_csrf'], 400);
         }
 
-        // Mise à jour des colonnes
+        // 3) Mise à jour des colonnes et des positions
         $columns = ['todo','doing','done','urgent'];
         foreach ($columns as $col) {
+            // $data[$col] contient la liste des ID dans cette colonne
             $ids = array_map('intval', (array)($data[$col] ?? []));
-            foreach ($ids as $i => $id) {
-                if ($task = $repo->find($id)) {
+            foreach ($ids as $i => $id) { 
+                // Vérification de l’existence de la tâche et de son appartenance à l’utilisateur courant
+               if ($task = $repo->findOneBy(['id' => $id, 'owner' => $this->getUser(),])) 
+                {
                     $task->setStatus($col);
                     $task->setPosition($i);
                 }
             }
         }
+        // 4) On enregistre toutes les modifications en base PostgreSQL
         $em->flush();
-
+        // 5) On renvoie une petite réponse JSON
         return new JsonResponse(['ok' => true]);
     }
 }
+
 

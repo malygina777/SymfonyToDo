@@ -52,17 +52,17 @@ body {
     flex-direction: column;
     min-height: 360px;
 }
-/* Шапка колонки */
+
 .kanban-column-header {
     font-size: 0.85rem;
 }
-/* Список карточек */
+
 .kanban-cards {
     flex: 1;
     overflow: auto;
     padding-bottom: 0.25rem;
 }
-/* Карточка */
+
 .kanban-card .card-body {
     line-height: 1.2;
 }
@@ -70,7 +70,6 @@ body {
     opacity: 0.8;
 }
 
-/* Цветная точка-индикатор в правом верхнем углу */
 .dot {
     display: inline-block;
     width: 0.65rem;
@@ -112,6 +111,7 @@ body {
 .navbar .text-focus:hover {
     color: rgba(255, 255, 255, 0.927) !important;
     transform: scale(1.08) !important;
+    border-radius: 5px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
@@ -254,6 +254,8 @@ body .btn.btn-create:focus {
     transform: scale(1.03);
     z-index: 1000;
     position: relative;
+    user-select: none !important;
+    touch-action: none !important;
 }
 /* если хочешь подсветить ещё и внутренности */
 .kanban-card.dragging .card-body {

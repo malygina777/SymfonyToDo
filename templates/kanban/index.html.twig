@@ -32,7 +32,7 @@
   } %}
 
   <section class="kanban kanban-glass shadow-lg rounded-4 p-3 p-md-2"
-           role="region" aria-label="Tableau Kanban">
+           role="region" aria-label=" Tableau principal à quatre colonnes et des tâches à l'intérieur">
 
     <div class="row flex-nowrap  g-3 overflow-auto kanban-columns">
 
@@ -87,14 +87,14 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {             // 1) Ждём, пока DOM построится (узлы уже доступны).
-  const columns = document.querySelectorAll('.kanban-cards');     // 2) Находим все контейнеры-колонки по классу .kanban-cards.
-  let dragged = null;                                             // 3) Переменная для ссылки на текущую перетаскиваемую карточку.
+document.addEventListener('DOMContentLoaded', () => {         // 1. On attend que le DOM soit construit (les nœuds sont disponibles).
+  const columns = document.querySelectorAll('.kanban-cards'); // 2. On récupère tous les conteneurs-colonnes avec la classe .kanban-cards.
+  let dragged = null;                                         //  3. Variable qui contient la carte actuellement déplacée.
   
-    // [ADD] соответствие колонок и классов цвета
+    // correspondance entre colonnes et classes de couleur.
   const DOT_BY_COL = { todo:'bg-primary', doing:'bg-warning', done:'bg-success', urgent:'bg-danger' };
   
-  // [ADD] перекрасить кружок у конкретной карточки
+  //  recolorer le point d’une carte en fonction de sa colonne
   function applyDotColor(task, colKey) {
     const dot = task.querySelector('.dot');
     if (!dot) return;
@@ -103,83 +103,82 @@ document.addEventListener('DOMContentLoaded', () => {             // 1) Ждём
   }
 
 
-  // 1. Делаем карточки перетаскиваемыми
-  function bindDraggableCards() {                                 // 4) Функция: вешаем обработчики на все карточки.
-    document.querySelectorAll('.kanban-card').forEach(card => {   // 5) Находим все элементы с классом .kanban-card.
+  // Rendre les cartes déplaçables
+  function bindDraggableCards() {                                 // 4. Fonction qui attache les écouteurs à toutes les cartes.
+    document.querySelectorAll('.kanban-card').forEach(card => {   // 5. On sélectionne tous les éléments avec la classe .kanban-card.
       
-      card.setAttribute('draggable', 'true');                     // ajout  un atribu
+      card.setAttribute('draggable', 'true');                     // ajout un atribu
 
-      card.addEventListener('dragstart', (e) => {                 // 6) Событие начала перетаскивания.
-        dragged = card;                                           // 7) Запоминаем, какую карточку тащим.
-        card.classList.add('dragging');                           // 8) Добавляем класс (можно стилизовать: .dragging {opacity:.6})
-        e.dataTransfer.setData('text/plain', card.dataset.id);    // 9) Кладём в “багаж” DnD ID карточки (для совместимости/Safari).
+      card.addEventListener('dragstart', (e) => {                 // 6. Événement au début du déplacement.
+        dragged = card;                                           // 7. On mémorise quelle carte est déplacée.
+        card.classList.add('dragging');                           // 8. On ajoute une classe visuelle (.dragging).
+        e.dataTransfer.setData('text/plain', card.dataset.id);    // 9. On met l’ID de la carte dans le “bagage” DnD pour compatibilité.
       });
 
-      card.addEventListener('dragend', () => {                    // 10) Событие конца перетаскивания (мышь отпущена).
-        dragged?.classList.remove('dragging');                    // 11) Снимаем визуальный класс, если карточка ещё есть.
-        dragged = null;                                           // 12) Очищаем ссылку — больше ничего не тащим.
+      card.addEventListener('dragend', () => {                    // 10. Événement à la fin du déplacement.
+        dragged?.classList.remove('dragging');                    // 11. On enlève la classe visuelle .dragging.
+        dragged = null;                                           // 12. On nettoie la variable : aucune carte n’est en cours de déplacement.
       });
     });
   }
-  bindDraggableCards();                                           // 13) Сразу применяем обработчики ко всем текущим карточкам.
+  bindDraggableCards();                                           // 13. On applique immédiatement les écouteurs à toutes les cartes.
 
-  // 2. Позволяем колонкам принимать карточки
-  columns.forEach(col => {                                        // 14) Для каждой колонки...
-    col.addEventListener('dragover', (e) => {                     // 15) Событие “тащат над колонкой”.
-      e.preventDefault();                                         // 16) ОБЯЗАТЕЛЬНО: разрешить бросать (иначе drop не сработает).
-      if (!dragged) return;                                       // 17) Если ничего не тащим — выходим.
-      col.appendChild(dragged);                                   // 18) Простейшая логика: кладём карточку в КОНЕЦ этой колонки.
+  // 2.Colonnes qui acceptent le drop
+  columns.forEach(col => {                                        // 14) Pour chaque colonne...
+    col.addEventListener('dragover', (e) => {                     // 15) Événement quand on survole la colonne avec une carte.
+      e.preventDefault();                                         // 16) OBLIGATOIRE : autoriser le drop, sinon l’événement drop ne se déclenche pas.
+      if (!dragged) return;                                       // 17)  Si aucune carte n’est déplacée, on ne fait rien.
+      col.appendChild(dragged);                                   // 18) On place la carte à la fin de cette colonne.
     });
 
-        // A) функция пересчёта
+        // A)Fonction de recalcul des compteurs.
        function updateCounters() {
       ['todo','doing','done','urgent'].forEach(k => {
         const box = document.getElementById('col-' + k);
         const badge = document.getElementById('count-' + k);
-        if (!box || !badge) return;                        // если какого-то блока/бейджа нет — пропускаем
+        if (!box || !badge) return;                        
         badge.textContent = box.querySelectorAll('.kanban-card').length;
       });
    }
-
-      // B) первичный подсчёт при загрузке
+      // B) Premier calcul des compteurs au chargement.
       updateCounters();
 
-    col.addEventListener('drop', () => {
-    // узнаём ключ колонки из её id
-    const colKey = (col.id || '').replace('col-', '');  // 'todo' | 'doing' | 'done' | 'urgent'
-    if (dragged) applyDotColor(dragged, colKey);        // перекрашиваем кружок у брошенной карточки
-    updateCounters();                                   // nous recalculons le nombre de taches dans la colonne
+    col.addEventListener('drop', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     
-    saveOrder();                                        // сохраняем порядок
+    const colKey = (col.id || '').replace('col-', '');                              // 'todo' | 'doing' | 'done' | 'urgent'  On récupère la clé de la colonne à partir de son id.
+    if (dragged) applyDotColor(dragged, colKey);                                    // On recolore le point de la carte déposée.
+    updateCounters();                                                               // nous recalculons le nombre de taches dans la colonne
+    
+    saveOrder();                                                                     // On sauvegarde l’ordre.
   });
   });
-
-  // 3. Сохраняем порядок
-  function saveOrder() {                                          // 21) Отправляем на сервер новый порядок карточек.
+                                                                                    
+  // 3. Sauvegarde de l’ordre
+  function saveOrder() {                                          // 21)On envoie au serveur le nouvel ordre des cartes
     const csrf = document.querySelector('meta[name="csrf-kanban"]')?.content || '';
-                                                                  // 22) Достаём CSRF-токен из <meta>. ?. — “если узел есть”.
-    const data = {                                                // 23) Формируем объект с данными:
+                                                                  // 22) On lit le jeton CSRF dans la balise <meta>.
+    const data = {                                                // 23) On construit l’objet de données.
       _token: csrf,                                               //     — кладём токен под ключом _token (как ждёт контроллер).
       todo:   Array.from(document.querySelectorAll('#col-todo .kanban-card'))
-               .map(c => c.dataset.id),                           // 24) Собираем массив ID из карточек в #col-todo.
+               .map(c => c.dataset.id),                           // 24)  On collecte la liste des IDs de la colonne todo.
       doing:  Array.from(document.querySelectorAll('#col-doing .kanban-card'))
-               .map(c => c.dataset.id),                           // 25) Точно так же — для doing…
+               .map(c => c.dataset.id),                           // 25) Pareil pour la colonne doing.
       done:   Array.from(document.querySelectorAll('#col-done .kanban-card'))
-               .map(c => c.dataset.id),                           // 26) …для done…
+               .map(c => c.dataset.id),                           // 26) Pareil pour done
       urgent: Array.from(document.querySelectorAll('#col-urgent .kanban-card'))
-               .map(c => c.dataset.id),                           // 27) …и для urgent.
+               .map(c => c.dataset.id),                           // 27)  Pareil pour urgent.
     };
 
 
-fetch('/kanban/save-order', {                                 // 28) Отправляем POST-запрос на роут сохранения.
-      method: 'POST',                                             // 29) Метод — POST.
-      headers: { 'Content-Type': 'application/json' },            // 30) Говорим серверу: шлём JSON.
-      body: JSON.stringify(data)                                  // 31) Превращаем объект data в JSON-строку.
-    });                                                           // 32) Ответ мы здесь не обрабатываем (по желанию можно .then()).
+    fetch('/kanban/save-order', {                                 // 28) On envoie une requête POST vers la route de sauvegarde.
+      method: 'POST',                                             // 29) Méthode HTTP : POST.
+      headers: { 'Content-Type': 'application/json' },            // 30) On indique au serveur qu’on envoie du JSON.
+      body: JSON.stringify(data)                                  // 31) On convertit l’objet data en JSON.
+    });                                                           // 32) On n’analyse pas la réponse ici (optionnel .then()).
   }
 });
 </script>
-
-
 
 {% endblock %}

@@ -1,5 +1,6 @@
 
-
+{# Fenêtre modale Bootstrap utilisée pour confirmer la suppression d’une tâche.
+  L’ID contient task.id pour avoir une modale unique par tâche. #}
 <div class="modal fade"
      id="deleteModal-{{ task.id }}"
      tabindex="-1"
@@ -8,28 +9,41 @@
      aria-labelledby="deleteModalLabel-{{ task.id }}"
      aria-describedby="deleteModalDesc-{{ task.id }}"
      aria-hidden="true">
+     {#  .modal-dialog : conteneur principal de la boîte de dialogue.
+    C’est Bootstrap qui applique le positionnement (centrage, largeur, etc.). #}
   <div class="modal-dialog">
+       {#  .modal-content : bloc qui contient visuellement la modale
+      (en-tête, corps, pied de page). #}
     <div class="modal-content">
 
       <div class="modal-header">
+      {# Titre de la fenêtre modale.
+           L’ID est utilisé par aria-labelledby ci-dessus pour l’accessibilité. #}
         <h5 class="modal-title" id="deleteModalLabel-{{ task.id }}">
           Confirmer la suppression
         </h5>
+        {# Bouton de fermeture (croix) fourni par Bootstrap.
+           data-bs-dismiss="modal" indique à Bootstrap de fermer la modale. #}
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
       </div>
-
+      {# ----- Corps de la modale ----- #}
       <div class="modal-body" id="deleteModalDesc-{{ task.id }}">
         Êtes-vous sûr de vouloir supprimer cette tâche ?
+        {# Texte supplémentaire uniquement pour les lecteurs d’écran #}
         <span class="visually-hidden">Cette action est irréversible.</span>
       </div>
-
+      {# ----- Pied de page : boutons d’action ----- #}
       <div class="modal-footer">
+      {# Bouton "Annuler" qui se contente de fermer la modale #}
         <button type="button" class="btn btn-secondary text-black" data-bs-dismiss="modal" autofocus>
           Annuler
         </button>
-
+        {# Formulaire de suppression envoyé en POST vers la route app_task_delete #}
         <form method="post" action="{{ path('app_task_delete', {'id': task.id}) }}">
+            {# Champ caché contenant le token CSRF.
+             le contrôleur vérifie ce token  avant de le supprimer. #}
           <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+          {# Bouton qui déclenche réellement la suppression (submit du formulaire) #}
           <button type="submit" class="btn btn-danger text-black">Supprimer</button>
         </form>
       </div>
@@ -37,3 +51,4 @@
     </div>
   </div>
 </div>
+

@@ -1,35 +1,32 @@
 
 
-
 {% extends 'base.html.twig' %}
-
+{# Le template hérite de la structure générale du site (header, footer, etc.) #}
 {% block title %}{{ task.title ?? 'Task' }}{% endblock %}
-
+{# Si la tâche a un titre → on l'affiche ; sinon on affiche "Task".
+   L'opérateur ?? permet d'éviter une erreur si la valeur est nulle. #}
 {% block body %}
-<div class="container py-4" role="main" aria-labelledby="page-title">
-
-  
+<div class="container py-4" role="main" aria-labelledby="page-title"> 
   <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-md-between mb-3 gap-2">
+   {# Grâce aux classes Bootstrap :
+       • flex-column → affichage en colonne sur mobile (vertical)
+       • flex-md-row → affichage en ligne sur desktop/tablette (horizontal)
+       Cela rend la page responsive automatiquement #}
     <h1 class="page-title m-0" id="page-title">Détail de la tâche</h1>
 
     <div class="d-flex align-items-center gap-2">
       <a class="btn btn-secondary"
          href="{{ path('app_task_index') }}"
-         aria-label="Retourner à la liste des tâches">← Retour</a>
+         aria-label="Retourner à la liste des tâches">← Retour</a> {# Bouton "Retour" vers la liste des tâches #}
       <a class="btn btn-warning"
-         href="{{ path('app_task_edit', {id: task.id}) }}"
+         href="{{ path('app_task_edit', {id: task.id}) }}" {# Lien vers l’édition : on passe l’ID dans l’URL #}
          aria-label="Modifier la tâche"> Modifier</a>
-      {{ include('task/_delete_form.html.twig', {
-        task: task,
-        button_class: 'btn btn-action btn-delete',
-        inner_html: '🗑'
-      }) }}
     </div>
   </div>
-
+ {# d-none d-md-block =
+       • d-none → caché sur mobile
+       • d-md-block → visible à partir de 768px #}
   <div class="table-card bg-white shadow-sm p-0 rounded-5 overflow-hidden">
-
- 
     <div class="d-none d-md-block">
       <table class="table align-middle mb-0">
         <tbody>
@@ -39,22 +36,23 @@
           </tr>
           <tr>
             <th scope="row">Titre</th>
-            <td class="text-break">{{ task.title }}</td>
+            <td class="text-break">{{ task.title }}</td> {# text-break évite que les titres trop longs débordent du tableau #}
           </tr>
           <tr>
             <th scope="row">Statut</th>
-            <td>
-              {% set statusText = task.status ?? '' %}
-              {% if statusText %}
-                {% set st = statusText|lower %}
-                {% set badgeClass =
-                  st in ['à faire','a faire','todo','a_faire'] ? 'badge-todo' :
-                  (st in ['en cours','doing','progress'] ? 'badge-doing' :
-                  (st in ['terminé','termine','done'] ? 'badge-done' : 'badge-other')) %}
-                <span class="badge status-badge {{ badgeClass }}"
-                      aria-label="Statut : {{ task.status }}">{{ task.status }}</span>
+            <td> {# On récupère la valeur du statut en sécurité (si null → '') #}
+              {% set st = task.status ?? '' %}
+              {# Selon le statut enregistré en base, on applique un badge couleur #}
+              {% if st == 'todo' %}
+                 {% set badgeClass = 'badge-todo' %}
+              {% elseif st == 'doing' %}
+                  {% set badgeClass = 'badge-doing' %}
+              {% elseif st == 'done' %}
+                  {% set badgeClass = 'badge-done' %}
+              {% elseif st == 'urgent' %}
+                  {% set badgeClass = 'badge-urgent' %}
               {% else %}
-                <span class="text-muted">—</span>
+                  {% set badgeClass = 'badge-other' %}
               {% endif %}
             </td>
           </tr>
@@ -65,7 +63,9 @@
         </tbody>
       </table>
     </div>
-
+       {# d-md-none =  • visible uniquement en dessous de "md" (mobile)
+        vstack = empile les éléments verticalement
+       → affichage en colonne : idéal pour les petits écrans#}
    
     <div class="d-md-none p-3 vstack gap-3 small">
       <div>
@@ -81,7 +81,7 @@
       <div>
         <div class="fw-bold mb-1">Statut</div>
         <div>
-          {% if statusText %}
+          {% if st %}
             <span class="badge status-badge {{ badgeClass }}"
                   aria-label="Statut : {{ task.status }}">{{ task.status }}</span>
           {% else %}

@@ -18,6 +18,7 @@ final class TaskController extends AbstractController
     public function index(TaskRepository $taskRepository): Response
     {    
         $tasks = $taskRepository->findBy(['owner' => $this->getUser()], ['id' => 'ASC']);
+
         return $this->render('task/index.html.twig', [
             'tasks' => $tasks
         ]);
@@ -33,6 +34,7 @@ final class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             /** @var \App\Entity\AppUser $user */
+
              $user = $this->getUser();       
              $task->setOwner($user);         
 
@@ -52,6 +54,10 @@ final class TaskController extends AbstractController
     #[Route('/{id}', name: 'app_task_show', methods: ['GET'])]
     public function show(Task $task): Response
     {
+        if ($task->getOwner() !== $this->getUser()) {
+        throw $this->createAccessDeniedException("Vous n'avez pas accès à cette tâche.");
+        }
+
         return $this->render('task/show.html.twig', [
             'task' => $task,
         ]);
@@ -62,6 +68,10 @@ final class TaskController extends AbstractController
     {
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
+
+        if ($task->getOwner() !== $this->getUser()) {
+            throw $this->createAccessDeniedException("Vous n'avez pas accès à cette tâche.");
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
@@ -77,8 +87,12 @@ final class TaskController extends AbstractController
 
     #[Route('/{id}', name: 'app_task_delete', methods: ['POST'])]
     public function delete(Request $request, Task $task, EntityManagerInterface $entityManager): Response
-    {
+    {   
+        if ($task->getOwner() !== $this->getUser()) {
+            throw $this->createAccessDeniedException("Vous n'avez pas accès à cette tâche.");
+        }
         if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->getPayload()->getString('_token'))) {
+            
             $entityManager->remove($task);
             $entityManager->flush();
         }
@@ -86,3 +100,5 @@ final class TaskController extends AbstractController
         return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
     }
 }
+
+

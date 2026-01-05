@@ -23,6 +23,6 @@ final class LoginController extends AbstractController
     #[Route('/logout', name: 'app_logout')]
     public function logout(): void
     {
-        throw new \LogicException('Logout перехватывается Security.');
+        throw new \LogicException('Logout est interceptée par Security.');
     }
 }

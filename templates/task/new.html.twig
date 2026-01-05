@@ -1,58 +1,64 @@
 
-
+{# On réutilise le layout global de l’application (barre de navigation, <head>, etc.) #}
 {% extends 'base.html.twig' %}
-
+{# Titre de la page, affiché dans l’onglet du navigateur #}
 {% block title %}Créer une tâche{% endblock %}
 
 {% block body %}
+{# Conteneur principal de la page, avec marges verticales #}
 <div class="container py-4" role="main" aria-labelledby="page-title">
 
-  {# открываем форму здесь, чтобы submit-кнопка была в верхнем хедере #}
+  {# J’ouvre le formulaire avant la zone où se trouve le bouton Enregistrer,
+   pour que ce bouton fasse bien partie du formulaire et puisse le soumettre correctement. #}
   {{ form_start(form, {'attr': {'role': 'form', 'aria-label': 'Formulaire de création de tâche'}}) }}
 
-  {# Хедер страницы + действия справа (как в Show/Edit) #}
+  
   <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between mb-3 gap-3">
     <div>
       <h1 id="page-title" class="page-title m-0">Créer une tâche</h1>
       <div class="page-subtitle" id="page-subtitle">Renseignez les informations de votre tâche</div>
     </div>
-
+    {# Groupe de boutons d’action : retour + enregistrement. "role=group" et aria-label pour l’accessibilité. #}
     <div class="d-flex justify-content-between gap-2" role="group" aria-label="Actions de la page">
-      <a href="{{ path('app_task_index') }}" 
+      <a href="{{ path('app_task_index') }}" {# Lien de retour vers la liste des tâches #}
          class="btn btn-secondary" 
          role="button"
          aria-label="Retourner à la liste des tâches">← Retour</a>
 
-      <button type="submit" 
+      <button type="submit" {# Bouton de soumission du formulaire (création de la tâche) #}
               class="btn btn-success" 
               aria-label="Enregistrer cette tâche">
         Enregistrer
       </button>
     </div>
   </div>
-
-  {# Карточка с полями формы, центрируем и даём внутренние отступы #}
+    {# Carte visuelle qui contient les champs du formulaire.
+     - table-card / bg-white / shadow-sm / rounded-5 : classes de style
+     - role="region" + aria-labelledby : pour décrire la zone aux lecteurs d’écran. #}
   <div class="table-card bg-white shadow-sm mx-auto rounded-5 overflow-hidden" 
-       role="region" 
+       role="region"                       
        aria-labelledby="page-subtitle">
     <div class="p-3">
-
-      <div class="mb-3">
-        {{ form_label(form.title, 'Titre', {'label_attr': {'class': 'form-label fw-bold', 'for': form.title.vars.id}}) }}
-        {{ form_widget(form.title, {
+      
+      <div class="mb-3"> {# Je choisis moi-même le texte du label ("Titre") au lieu d’utiliser celui généré par Symfony. #}
+                         {# on relie le label au champ par son id #}
+        {{ form_label(form.title, 'Titre', {'label_attr': {'class': 'form-label fw-bold', 'for': form.title.vars.id}}) }} 
+        {# Champ de saisie lui-même (input texte). On ajoute des attributs HTML pour le style et l’accessibilité.
+         form.title.vars.id ~ '_help' lien avec le texte d’aide ci-dessous #}
+        {{ form_widget(form.title, {                                                      
           'attr': {
             'class': 'form-control',
             'placeholder': 'Entrez un titre',
             'aria-required': 'true',
-            'aria-describedby': form.title.vars.id ~ '_help'
+            'aria-describedby': form.title.vars.id ~ '_help'  
           }
-        }) }}
+        }) }} {# Texte d’aide associé au champ "title". "visually-hidden" : visible seulement pour les lecteurs d’écran. #}
         <small id="{{ form.title.vars.id }}_help" class="form-text text-muted visually-hidden">
           Indiquez le titre de votre tâche.
         </small>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3"> {# Champ : Statut de la tâche (todo / doing / done / urgent) #}
         {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'form-label fw-bold', 'for': form.status.vars.id}}) }}
         {{ form_widget(form.status, {
           'attr': {
@@ -65,36 +71,38 @@
           Choisissez le statut actuel de votre tâche.
         </small>
       </div>
-
+      {# Champ : Description (texte libre, optionnel) #}
       <div class="mb-3">
         {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label fw-bold', 'for': form.description.vars.id}}) }}
+        {# Zone de texte pour la description de la tâche #}
         {{ form_widget(form.description, {
           'attr': {
             'class': 'form-control',
-            'aria-describedby': form.description.vars.id ~ '_help'
-          }
+            'aria-describedby': form.description.vars.id ~ '_help' }
         }) }}
         <small id="{{ form.description.vars.id }}_help" class="form-text text-muted visually-hidden">
           Ajoutez une brève description ou des détails.
         </small>
       </div>
-
+      {# Champ : Date d’alerte (dueAt) #}
       <div class="mb-3">
-        {{ form_label(form.dueAt, 'Date à laquelle vous souhaitez être alerté', {'label_attr': {'class': 'form-label fw-bold', 'for': form.dueAt.vars.id}}) }}
+        {{ form_label(form.dueAt, 'Date à laquelle vous souhaitez être alerté',
+         {'label_attr': {'class': 'form-label fw-bold', 'for': form.dueAt.vars.id}}) }}
+      {# Widget du champ "dueAt". Dans TaskType, ce champ est de type DateType avec widget "single_text", 
+      ce qui génère un input de type "date" avec calendrier HTML5. #}
         {{ form_widget(form.dueAt, {
           'attr': {
             'class': 'form-control',
             'aria-describedby': form.dueAt.vars.id ~ '_help'
           }
-        }) }}
+        }) }} {# Texte d’aide pour préciser le rôle de cette date (échéance / alerte) #}
         <small id="{{ form.dueAt.vars.id }}_help" class="form-text text-muted visually-hidden">
           Sélectionnez la date limite ou la date d’alerte.
         </small>
       </div>
-
     </div>
-  </div>
-
+  </div>  {# Fermeture du formulaire : Symfony génère automatiquement les champs cachés nécessaires (par exemple le token CSRF). #}
   {{ form_end(form) }}
 </div>
 {% endblock %}
+

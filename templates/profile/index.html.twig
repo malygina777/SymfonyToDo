@@ -65,19 +65,20 @@
 
                   <div class="d-flex justify-content-between">
                     <button class="btn btn-create px-4" type="submit">Mettre à jour</button>
-                     <a href="{{ path('app_kanban') }}" class="btn btn-secondary" role="button"aria-label="Retourner à la page principale du ToDoList">← Retour</a>
+                     
                   </div>
 
 
                 {{ form_end(avatarForm) }}
-
-               <button type="button"
-                        class="btn btn-danger mt-4 change-text-color"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteAccountModal">
-                        Supprimer mon compte
-                </button>
-               
+                   <div class="d-flex justify-content-between">
+                         <button type="button"
+                                  class="btn btn-danger mt-4 change-text-color"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#deleteAccountModal">
+                                  Supprimer mon compte
+                          </button>
+                          <a href="{{ path('app_kanban') }}" class="btn btn-secondary mt-4 change-text-color" role="button"aria-label="Retourner à la page principale du ToDoList">← Retour</a>
+                  </div>
 
               </div>
             </div>

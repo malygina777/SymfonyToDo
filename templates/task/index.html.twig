@@ -17,6 +17,7 @@
     <a class=" btn btn-info"
        href="{{ path('app_task_new') }}"
        aria-label="Créer une nouvelle tâche">Créer une tâche</a>
+
   </div>
 
   {# Словарь статусов #}
@@ -101,37 +102,49 @@ w3.org/2000/svg" width="16" height="16"
     {% endif %}
   </div>
 
-  {# =========================
-     B) ДЕСКТОП/ПЛАНШЕТ (≥ sm)
-     ========================= #}
+  {# Bloc affiché uniquement sur les écrans ≥ sm (tablette / desktop).
+   Sur mobile, une autre mise en page est utilisée. #}
   <div class="d-none d-sm-block">
     <div class=" table-card  ">
       <div class="table-responsive">
         <table class="table align-middle mb-0 rounded-5 overflow-hidden">
           <thead>
             <tr>
-              <th scope="col" style="width:72px">#</th>
-              <th scope="col">Titre</th>
-              <th scope="col" style="width:160px">Statut</th>
-              <th scope="col" class="text-center" style="width:160px; ">Actions</th>
+              <th scope="col" style="width:72px">#</th> {# Colonne pour l’identifiant de la tâche #}
+              <th scope="col">Titre</th> {# Colonne pour le titre de la tâche #}
+              <th scope="col" style="width:160px">Statut</th> {# Colonne pour le statut (badge de couleur) #}
+              <th scope="col" class="text-center" style="width:160px; ">Actions</th> {# Colonne pour les boutons Voir / Modifier / Supprimer #}
             </tr>
           </thead>
           <tbody>
+          {# Boucle qui parcourt toutes les tâches renvoyées par le contrôleur #}
             {% for task in tasks %}
+              {# 1) On prépare une "clé" normalisée à partir du statut de la tâche.
+             - task.status ?? ''  → si le statut est null, on prend une chaîne vide
+             - lower             → on met tout en minuscules
+             - replace           → on enlève les espaces et les underscores #}
               {% set code = (task.status ?? '')|lower|replace({' ':'','_':''}) %}
+              {# 2) On récupère les métadonnées du statut dans la constante STATUS.
+             STATUS est un tableau défini côté PHP ou passé au template :
+             STATUS[code] contient par exemple : { label: 'À faire', badge: 'badge-todo' }.
+             Si la clé n’existe pas, on met null. #}
               {% set meta = STATUS[code] ?? null %}
               <tr>
-                <td class="text-muted">#{{ task.id }}</td>
-                <td class="text-break">{{ task.title }}</td>
+                <td class="text-muted">#{{ task.id }}</td> {# Affiche l’ID de la tâche avec un style gris #}
+                <td class="text-break">{{ task.title }}</td> {# Affiche le titre ; "text-break" permet de couper le texte long #}
                 <td>
                   {% if meta %}
+                  {# Si on a trouvé une entrée dans STATUS :
+                   - meta.badge contient la classe CSS pour la couleur
+                   - meta.label contient le texte lisible pour l’utilisateur #}
                     <span class="badge status-badge {{ meta.badge }}">{{ meta.label }}</span>
-                  {% else %}
-                    <span class="badge status-badge badge-other">{{ task.status }}</span>
+                  {% else %} {# Si le statut n’est pas reconnu, on affiche une version "par défaut" #}
+                    <span class="badge status-badge badge-other">{{ task.status }}</span> {# Badge visuel du statut actuel de la tâche #}
                   {% endif %}
                 </td>
                 <td class="text-end">
                   <div class="d-inline-flex flex-wrap justify-content-end gap-2">
+                  {# Bouton "Voir" : lien vers la page de détail de la tâche #}
                     <a class="btn btn-sm btn-action btn-show"
                        title="Voir"
                        href="{{ path('app_task_show', {id: task.id}) }}"
@@ -143,7 +156,7 @@ w3.org/2000/svg" width="16" height="16"
                         <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
                       </svg>
                     </a>
-
+                     {# Bouton "Modifier" : lien vers le formulaire d’édition #}
                     <a class="btn btn-sm btn-action btn-edit"
                        title="Modifier"
                        href="{{ path('app_task_edit', {id: task.id}) }}"
@@ -152,11 +165,9 @@ w3.org/2000/svg" width="16" height="16"
                            fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16"
                            aria-hidden="true" focusable="false">
                         <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-
-
-</svg>
+                       </svg>
                     </a>
-
+                    {# Bouton "Supprimer" : ouvre la fenêtre modale de confirmation #}
                     <button type="button"
                             class="btn btn-outline-danger btn-sm"
                             data-bs-toggle="modal"
@@ -174,7 +185,7 @@ w3.org/2000/svg" width="16" height="16"
                 </td>
               </tr>
             {% else %}
-              <tr>
+              <tr> {# Cas où il n’y a aucune tâche à afficher #}
                 <td colspan="4" class="text-center text-muted py-4">
                   Aucune tâche pour le moment.
                 </td>
@@ -192,3 +203,6 @@ w3.org/2000/svg" width="16" height="16"
 </div>
  
 {% endblock %}
+
+
+
