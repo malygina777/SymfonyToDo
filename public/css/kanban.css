@@ -95,7 +95,10 @@ body {
     height: 32px;
     border-radius: 6px;
     transform-origin: center;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
 }
 .navbar .navbar-brand:hover .brand-logo,
 .navbar .navbar-brand:focus-visible .brand-logo {
