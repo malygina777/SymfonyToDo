@@ -1,5 +1,7 @@
 # 📝 To-Do List Application
 
+## Live demo: https://symfonytodolist.alwaysdata.net
+  
 ## Description
 
 This project is a web application developed with Symfony and PHP.
@@ -33,7 +35,7 @@ It allows users to manage tasks, organize them with drag & drop, receive email n
 ## Installation
 
 ### 1. Clone the project
-git clone YOUR_GITHUB_LINK
+git clone https://github.com/malygina777/SymfonyToDo
 cd YOUR_PROJECT_FOLDER
 composer install
 
@@ -92,8 +94,6 @@ docker compose down
 
 ---
 
-## Links
 
-- Live demo: https://symfonytodolist.alwaysdata.net
 
 
